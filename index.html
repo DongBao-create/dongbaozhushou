@@ -13,6 +13,7 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --bg-body: #f4f6f9;
@@ -3027,6 +3028,7 @@
 
     <script>
         // ======================== 全局变量 ========================
+        let sellTags = [];
         let imageDB = null,
             db = null;
         let currentMaterials = [],
@@ -3858,7 +3860,7 @@
                 for (let id of record.imageIds) {
                     const url = await loadImageBlob(id);
                     if (url) {
-                        imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg border border-gray-200" onclick="window.open('${url}','_blank')" />`;
+                        imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg border border-gray-200" onclick="openImagePreview('${url}')" />`;
                     }
                 }
             }
@@ -3905,14 +3907,61 @@
             });
         }
 
+        function openImagePreview(url) {
+            if (!url) {
+                showCustomAlert('图片加载失败：无效的图片数据');
+                return;
+            }
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;cursor:pointer;';
+            modal.onclick = function () { this.remove(); };
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.cssText = 'max-width:90%;max-height:90%;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.4);';
+            img.onerror = function () {
+                showCustomAlert('图片加载失败，请检查图片数据');
+                modal.remove();
+            };
+            modal.appendChild(img);
+            document.body.appendChild(modal);
+        }
+
         async function loadImageBlob(id) {
-            return new Promise((res) => {
+            return new Promise((resolve) => {
+                if (!imageDB) {
+                    resolve(null);
+                    return;
+                }
                 const tx = imageDB.transaction('images', 'readonly');
-                const req = tx.objectStore('images').get(id);
-                req.onsuccess = () => {
-                    if (req.result) res(URL.createObjectURL(req.result.blob));
-                    else res('');
+                const store = tx.objectStore('images');
+                const request = store.get(id);
+                request.onsuccess = () => {
+                    if (request.result) {
+                        const blob = request.result.blob;
+                        // 确保 blob 有数据
+                        if (blob && blob.size > 0) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                const buffer = e.target.result;
+                                let binary = '';
+                                const bytes = new Uint8Array(buffer);
+                                for (let i = 0; i < bytes.byteLength; i++) {
+                                    binary += String.fromCharCode(bytes[i]);
+                                }
+                                const mimeType = blob.type || 'image/jpeg';
+                                const base64 = btoa(binary);
+                                resolve(`data:${mimeType};base64,${base64}`);
+                            };
+                            reader.onerror = () => resolve(null);
+                            reader.readAsArrayBuffer(blob);
+                        } else {
+                            resolve(null);
+                        }
+                    } else {
+                        resolve(null);
+                    }
                 };
+                request.onerror = () => resolve(null);
             });
         }
 
@@ -4199,18 +4248,38 @@
             const metadata = {};
             const allImageIds = new Set();
 
-            // 处理 materialsFull
-            if (scope === 'all' || scope === 'materialsFull') {
+            // 辅助判断是否包含某种数据
+            const include = (type) => scope === 'all' || scope === type;
+
+            // ---------- 素材及相关 ----------
+            if (include('materials') || include('materialsFull')) {
                 metadata.materials = currentMaterials;
-                for (let m of currentMaterials) {
-                    if (m.imageIds) m.imageIds.forEach(id => allImageIds.add(id));
-                }
                 metadata.bigTags = bigTags;
                 metadata.smallTags = smallTags;
                 metadata.shops = currentShops;
+                for (let m of currentMaterials) {
+                    if (m.imageIds) m.imageIds.forEach(id => allImageIds.add(id));
+                }
             }
-            // 处理 sellTypesFull
-            else if (scope === 'all' || scope === 'sellTypesFull') {
+
+            // ---------- 财务记录 ----------
+            if (include('finances')) {
+                metadata.finances = currentFinances;
+                for (let f of currentFinances) {
+                    if (f.imageIds) f.imageIds.forEach(id => allImageIds.add(id));
+                }
+            }
+
+            // ---------- 订单 ----------
+            if (include('schedules')) {
+                metadata.schedules = currentSchedules;
+                for (let s of currentSchedules) {
+                    if (s.imageIds) s.imageIds.forEach(id => allImageIds.add(id));
+                }
+            }
+
+            // ---------- 售卖类型（含售卖标签） ----------
+            if (include('sellTypes') || include('sellTypesFull')) {
                 metadata.sellTypes = sellTypes;
                 for (let st of sellTypes) {
                     if (st.imageIds) st.imageIds.forEach(id => allImageIds.add(id));
@@ -4218,31 +4287,23 @@
                 const sellTagsList = await getAll('sellTags') || [];
                 metadata.sellTags = sellTagsList;
             }
-            // 其他原有 scope
-            else {
-                if (scope === 'materials') {
-                    metadata.materials = currentMaterials;
-                    for (let m of currentMaterials) if (m.imageIds) m.imageIds.forEach(id => allImageIds.add(id));
-                }
-                if (scope === 'finances') metadata.finances = currentFinances;
-                if (scope === 'schedules') {
-                    metadata.schedules = currentSchedules;
-                    for (let s of currentSchedules) if (s.imageIds) s.imageIds.forEach(id => allImageIds.add(id));
-                }
-                if (scope === 'sellTypes') {
-                    metadata.sellTypes = sellTypes;
-                    for (let st of sellTypes) if (st.imageIds) st.imageIds.forEach(id => allImageIds.add(id));
-                }
-                if (scope === 'shops') metadata.shops = currentShops;
-                if (scope === 'bigTags') metadata.bigTags = bigTags;
-                if (scope === 'smallTags') metadata.smallTags = smallTags;
-                if (scope === 'sellTags') {
-                    const sellTagsList = await getAll('sellTags') || [];
-                    metadata.sellTags = sellTagsList;
-                }
+
+            // ---------- 独立导出（仅店铺、大小标签、售卖标签） ----------
+            if (include('shops')) {
+                metadata.shops = currentShops;
+            }
+            if (include('bigTags')) {
+                metadata.bigTags = bigTags;
+            }
+            if (include('smallTags')) {
+                metadata.smallTags = smallTags;
+            }
+            if (include('sellTags')) {
+                const sellTagsList = await getAll('sellTags') || [];
+                metadata.sellTags = sellTagsList;
             }
 
-            // 导出图片
+            // ---------- 导出所有收集到的图片 ----------
             for (let id of allImageIds) {
                 const url = await loadImageBlob(id);
                 if (url) {
@@ -4256,14 +4317,17 @@
                 }
             }
 
+            // ---------- 写入元数据 JSON ----------
             zip.file("metadata.json", JSON.stringify(metadata));
+
+            // ---------- 生成 ZIP 并下载 ----------
             const blob = await zip.generateAsync({ type: "blob" });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = `backup_${scope}_${new Date().toISOString().slice(0, 19)}.zip`;
             a.click();
 
-            // ---------- 硬编码中文提示 ----------
+            // ---------- 显示名称（与原有逻辑一致） ----------
             let displayName = '';
             if (scope === 'all') displayName = '全部数据';
             else if (scope === 'materialsFull') displayName = '素材（含标签&店铺）';
@@ -5072,7 +5136,7 @@
             for (let imgId of (material.imageIds || [])) {
                 const url = await loadImageBlob(imgId);
                 if (url) {
-                    imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg border border-gray-200" onclick="window.open('${url}','_blank')" />`;
+                    imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg border border-gray-200" onclick="openImagePreview('${url}')" />`;
                 }
             }
 
@@ -5668,6 +5732,8 @@
             if (!items.length) {
                 container.innerHTML = '<div class="text-center text-gray-400 py-4">暂无记录</div>';
                 document.getElementById('financePagination').innerHTML = '';
+                document.getElementById('filteredIncome').innerText = '¥0.00';
+                document.getElementById('filteredExpense').innerText = '¥0.00';
                 return;
             }
             let html = '';
@@ -8463,7 +8529,7 @@
                 for (let id of st.imageIds) {
                     const url = await loadImageBlob(id);
                     if (url) {
-                        imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg border border-gray-200" onclick="window.open('${url}','_blank')" />`;
+                        imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg border border-gray-200" onclick="openImagePreview('${url}')" />`;
                     }
                 }
             }
@@ -8503,7 +8569,6 @@
             document.getElementById('sellTypeDetailContent').innerHTML = content;
             document.getElementById('sellTypeDetailModal').classList.remove('hidden');
         }
-
 
 
         // ======================== 售卖类型管理 ========================
@@ -8990,6 +9055,7 @@
             searchInput.className = 'schedule-type-search flex-1 min-w-0 border rounded-lg px-3 py-1 text-sm';
             searchInput.value = item?.name || '';
             if (isDeleted) {
+                div.dataset.deleted = 'true';   // ← 新增这一行
                 searchInput.disabled = true;
                 searchInput.classList.add('bg-gray-100', 'text-gray-500');
             }
@@ -9465,6 +9531,8 @@
             const orderType = document.getElementById('scheduleOrderType').value.trim();
             if (!orderType) { showCustomAlert('请填写接单类型'); return; }
             const platform = document.getElementById('schedulePlatform').value.trim();
+
+            // --- 收集项目明细（直接从 DOM 读取，使用 dataset.deleted 判断） ---
             const items = [];
             const itemRows = document.querySelectorAll('.schedule-item-row');
             for (let row of itemRows) {
@@ -9472,40 +9540,20 @@
                 const name = searchInput ? searchInput.value.trim() : '未命名';
                 const qty = parseInt(row.querySelector('.schedule-qty')?.value) || 1;
                 const price = parseFloat(row.querySelector('.schedule-price')?.value) || 0;
-                const matched = sellTypes.find(t => (t.level3 || t.name) === name);
-                const typeId = matched ? matched.id : null;
-                // 检查是否标记为已删除（由 row 本身携带）
-                const isDeleted = row.querySelector('.schedule-type-search')?.disabled === true; // 粗略判断
-                // 更准确：检查该行的 item 对象是否有 deleted 标记，但我们没有存储，可以从 items 传入？
-                // 由于我们是从 DOM 重建，我们需要从 DOM 属性或 data 中读取。
-                // 可以在行上存储 data-deleted 属性，在 addScheduleItemRowWithSearch 中设置。
-                // 但为了简洁，我们使用一个变通：如果该行名称包含“（已删除）”，则视为已删除。
-                const isDeletedByName = name.includes('（已删除）');
-                // 如果是已删除项目，我们不将其加入 items，也不扣库存，但保留在订单中（我们不会覆盖它？）
-                // 更好的做法：保留它，但 typeId 置 null，并标记 deleted: true
-                // 我们从当前订单的原始数据中获取该行的 deleted 状态（如果有编辑ID）
-                let deletedFlag = false;
-                if (currentScheduleEditId) {
-                    const oldOrder = currentSchedules.find(s => s.id === currentScheduleEditId);
-                    if (oldOrder && oldOrder.items) {
-                        // 通过名称匹配找到原项（可能不准确，但可以传递 index）
-                        // 为了精确，我们在 addScheduleItemRowWithSearch 时给行添加 data-index，
-                        // 但这里我们简单处理：如果该项原先是 deleted，则保留 deleted 标记。
-                        // 我们可以在保存时获取所有行，但因为我们有 currentScheduleEditId，我们可以在保存时保留原有 items 的 deleted 标记。
-                        // 更稳健：从旧订单中保留整个 items 数组，但更新非 deleted 项。
-                        // 这里实现一个简化版本：保存时，我们提取所有非 deleted 行，并保留 deleted 行原样（从旧数据中取）。
-                    }
-                }
-                // 我们采用：如果当前行名称包含“（已删除）”，则跳过此项目的库存处理，但保留在 items 中（带 deleted: true）
-                if (isDeletedByName) {
-                    // 该项目已删除，保留它但不扣库存
+
+                // ✅ 关键：如果该行被标记为已删除，则保留但不扣库存
+                if (row.dataset.deleted === 'true') {
                     items.push({ typeId: null, name, qty, price, discount: 0, deleted: true });
                     continue;
                 }
-                // 否则正常处理
+
+                // 正常项目：匹配售卖类型
+                const matched = sellTypes.find(t => (t.level3 || t.name) === name);
+                const typeId = matched ? matched.id : null;
                 items.push({ typeId, name, qty, price, discount: 0 });
             }
 
+            // --- 其他字段 ---
             const requirements = document.getElementById('scheduleRequirements').value;
             const deposit = parseFloat(document.getElementById('scheduleDeposit').value) || 0;
             const finalAmount = parseFloat(document.getElementById('scheduleFinalAmount').value) || 0;
@@ -9514,12 +9562,11 @@
             if (!deadline) { showCustomAlert('请设置截止时间'); return; }
             const color = document.getElementById('scheduleColor').value || '#e09d8e';
 
-            // ---- 编辑时先释放原有库存（但只针对未删除的项目） ----
+            // ---- 编辑时先释放原有库存（只针对未删除的项目） ----
             if (currentScheduleEditId) {
                 const oldSchedule = currentSchedules.find(s => s.id === currentScheduleEditId);
                 if (oldSchedule && oldSchedule.items) {
                     for (let oldItem of oldSchedule.items) {
-                        // 只释放未被标记为 deleted 的旧项目（即原本是有效库存的）
                         if (oldItem.typeId && !oldItem.deleted) {
                             const sellType = sellTypes.find(t => t.id === oldItem.typeId);
                             if (sellType && sellType.enableInventory) {
@@ -9538,7 +9585,7 @@
                     if (sellType && sellType.enableInventory) {
                         if ((sellType.quantity || 0) < item.qty) {
                             showCustomAlert(`售卖类型“${sellType.level3}”库存不足（剩余 ${sellType.quantity || 0}，需要 ${item.qty}）`);
-                            // 如果检查失败，需要恢复之前释放的库存（如果有）
+                            // 检查失败，恢复之前释放的库存
                             if (currentScheduleEditId) {
                                 const oldSchedule = currentSchedules.find(s => s.id === currentScheduleEditId);
                                 if (oldSchedule && oldSchedule.items) {
@@ -9571,7 +9618,7 @@
                 }
             }
 
-            // 处理图片
+            // ---- 处理图片 ----
             let imageIds = currentScheduleEditId ? (currentSchedules.find(s => s.id === currentScheduleEditId)?.imageIds || []) : [];
             if (window.pendingScheduleDeleteIds && window.pendingScheduleDeleteIds.length) {
                 imageIds = imageIds.filter(id => !window.pendingScheduleDeleteIds.includes(id));
@@ -9592,27 +9639,11 @@
                 }
             }
 
-            // 构建最终 items 数组：保留所有项目，包括 deleted 的
-            // 注意：我们需要确保 deleted 标记保留，所以需要将 items 中的 deleted 属性保留
-            const finalItems = items.map(item => {
-                // 如果是从 DOM 读取的，可能没有 deleted 字段，我们从旧数据中恢复（如果有）
-                if (currentScheduleEditId) {
-                    const oldOrder = currentSchedules.find(s => s.id === currentScheduleEditId);
-                    if (oldOrder && oldOrder.items) {
-                        // 通过名称和价格匹配来找到对应的旧项（简易方法）
-                        const oldItem = oldOrder.items.find(oi => oi.name === item.name && oi.price === item.price);
-                        if (oldItem && oldItem.deleted) {
-                            return { ...item, deleted: true };
-                        }
-                    }
-                }
-                return item;
-            });
-
+            // ---- 构建最终数据（直接使用 items，因为 deleted 标记已在上面从 DOM 获取） ----
             const scheduleData = {
                 orderType,
                 platform,
-                items: finalItems,
+                items: items,           // ✅ 直接使用，无需再通过名称匹配恢复 deleted
                 requirements,
                 deposit,
                 finalAmount,
@@ -9626,7 +9657,6 @@
                 appliedServices: orderAppliedServices
             };
             if (currentScheduleEditId) {
-                // 保留原有的 locked 字段（但我们现在不用全局 locked）
                 const existing = currentSchedules.find(s => s.id === currentScheduleEditId);
                 if (existing && existing.locked) scheduleData.locked = existing.locked;
                 scheduleData.id = currentScheduleEditId;
@@ -9811,14 +9841,14 @@
                     ).join('<br>') + `</div></div>`;
             }
 
-            // ===== 修复：使用 for...of 同步加载图片 =====
+            // 图片
             let imagesHtml = '';
             if (schedule.imageIds && schedule.imageIds.length) {
                 imagesHtml = `<div class="schedule-detail-card"><div class="label">附件图片</div><div class="flex flex-wrap gap-2 mt-1">`;
                 for (let id of schedule.imageIds) {
                     const url = await loadImageBlob(id);
                     if (url) {
-                        imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg" onclick="window.open('${url}','_blank')" />`;
+                        imagesHtml += `<img src="${url}" class="image-thumb w-16 h-16 object-cover rounded-lg" onclick="openImagePreview('${url}')" />`;
                     }
                 }
                 imagesHtml += `</div></div>`;
