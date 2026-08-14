@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>冬宝助手-网页版</title>
+    <title>冬宝助手</title>
     <script>
         (function () {
             try {
@@ -1857,6 +1857,86 @@
             margin-top: 2px;
         }
 
+        .wy-auth-sheet-wrap {
+            overflow: auto;
+            max-height: 55vh;
+            border: 1px solid #e8e4de;
+            border-radius: 12px;
+            background: #fff;
+        }
+        .wy-auth-sheet {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            min-width: 520px;
+        }
+        .wy-auth-sheet th {
+            position: sticky;
+            top: 0;
+            background: #f7f3ee;
+            z-index: 1;
+            text-align: left;
+            padding: 8px 6px;
+            border-bottom: 1px solid #e8e4de;
+            font-weight: 600;
+            color: #5c5348;
+            white-space: nowrap;
+        }
+        .wy-auth-sheet td {
+            padding: 4px 4px;
+            border-bottom: 1px solid #f0ebe4;
+            vertical-align: middle;
+        }
+        .wy-auth-sheet tr:hover td { background: #faf8f5; }
+        .wy-auth-sheet input,
+        .wy-auth-sheet select {
+            width: 100%;
+            border: 1px solid #e5e0d8;
+            border-radius: 8px;
+            padding: 5px 6px;
+            font-size: 12px;
+            background: #fff;
+            min-width: 0;
+        }
+        .wy-auth-sheet .col-plat { width: 88px; }
+        .wy-auth-sheet .col-id { width: 90px; }
+        .wy-auth-sheet .col-qq { width: 90px; }
+        .wy-auth-sheet .col-copies { width: 56px; }
+        .wy-auth-sheet .col-intent { width: 72px; }
+        .wy-auth-sheet .col-act { width: 88px; white-space: nowrap; }
+        .wy-auth-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+            padding: 8px;
+            border: 1px solid #e8e4de;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            background: #faf8f5;
+            font-size: 12px;
+        }
+        .wy-sponsor-stamp {
+            display: inline-block;
+            border: 2px solid #b45448;
+            color: #b45448;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transform: rotate(-6deg);
+        }
+        .wy-sponsor-stamp.is-btn {
+            cursor: pointer;
+            transform: none;
+            background: #fff;
+        }
+        .wy-sponsor-stamp.is-btn:hover { background: #fff5f3; }
+        .wy-mode-on {
+            background: color-mix(in srgb, var(--accent, #c9a9a6) 35%, #fff) !important;
+            color: #3a3530 !important;
+        }
         .sell-type-item-card .item-tags span {
             font-size: 9px;
             padding: 1px 6px;
@@ -2009,6 +2089,24 @@
             font-weight: 500;
         }
         .receipt-item.is-done { opacity: 0.72; }
+        .receipt-item.receipt-item-toggle {
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 6px 6px;
+            margin-left: -6px;
+            margin-right: -6px;
+            transition: background 0.15s;
+        }
+        .receipt-item.receipt-item-toggle:hover {
+            background: rgba(58, 53, 48, 0.06);
+        }
+        .receipt-item.receipt-item-toggle::after {
+            content: attr(data-tip);
+            grid-column: 1 / -1;
+            font-size: 10px;
+            color: #9a938a;
+            letter-spacing: 0.08em;
+        }
         .order-item-toggle-row {
             display: flex;
             align-items: flex-start;
@@ -2236,6 +2334,227 @@
             word-break: break-word;
             overflow-wrap: anywhere;
         }
+
+
+        /* ===== 后厨工作台（仅订单 Tab） ===== */
+        #orderTab.kitchen-station {
+            --kitchen-bg: #2a2622;
+            --kitchen-panel: #35302b;
+            --kitchen-card: #fff8ec;
+            --kitchen-ink: #2f2a25;
+            --kitchen-muted: #9a9186;
+            --kitchen-line: rgba(255, 248, 236, 0.12);
+            --kitchen-hot: var(--accent, #c9a9a6);
+            margin: -4px -2px 0;
+            padding: 14px 12px 20px;
+            border-radius: 20px;
+            background:
+                radial-gradient(ellipse at top, rgba(255,255,255,0.05), transparent 55%),
+                linear-gradient(165deg, #332e29 0%, var(--kitchen-bg) 45%, #221f1c 100%);
+            color: #f3ebe1;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+        #orderTab.kitchen-station h2,
+        #orderTab.kitchen-station .kitchen-title {
+            color: #fff8ec !important;
+            letter-spacing: 0.06em;
+        }
+        #orderTab.kitchen-station .price-stat {
+            background: rgba(255,248,236,0.08) !important;
+            color: #ebe2d6 !important;
+            border: 1px solid var(--kitchen-line) !important;
+        }
+        #orderTab.kitchen-station .price-stat span {
+            color: #ebe2d6 !important;
+        }
+        #orderTab.kitchen-station .order-filter-btn {
+            background: rgba(255,248,236,0.08) !important;
+            color: #d9d0c4 !important;
+            border: 1px solid transparent;
+        }
+        #orderTab.kitchen-station .order-filter-btn.bg-indigo-100,
+        #orderTab.kitchen-station .order-filter-btn.is-active {
+            background: color-mix(in srgb, var(--kitchen-hot) 28%, #3a342e) !important;
+            color: #fff8ec !important;
+            border-color: color-mix(in srgb, var(--kitchen-hot) 45%, transparent) !important;
+        }
+        #orderTab.kitchen-station #orderSearch,
+        #orderTab.kitchen-station #orderSort {
+            background: rgba(255,248,236,0.08) !important;
+            border-color: var(--kitchen-line) !important;
+            color: #f3ebe1 !important;
+        }
+        #orderTab.kitchen-station #orderSearch::placeholder { color: #9a9186; }
+        #orderTab.kitchen-station .layout-switch-btn {
+            background: rgba(255,248,236,0.08) !important;
+            color: #d9d0c4 !important;
+        }
+        #orderTab.kitchen-station .layout-switch-btn.is-active {
+            background: var(--kitchen-hot) !important;
+            color: #2a2622 !important;
+        }
+        #orderTab.kitchen-station .batch-bar {
+            background: rgba(255,248,236,0.08) !important;
+            border-color: var(--kitchen-line) !important;
+            color: #ebe2d6 !important;
+        }
+        #orderTab.kitchen-station .card,
+        #orderTab.kitchen-station .kitchen-ticket {
+            background: var(--kitchen-card) !important;
+            color: var(--kitchen-ink);
+            border-color: rgba(58,53,48,0.12) !important;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.22) !important;
+        }
+        #orderTab.kitchen-station .kitchen-ticket {
+            position: relative;
+            border-radius: 10px;
+            padding: 14px 14px 12px;
+            overflow: hidden;
+        }
+        #orderTab.kitchen-station .kitchen-ticket::before {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; top: 0;
+            height: 6px;
+            background: repeating-linear-gradient(90deg, transparent 0 8px, rgba(47,42,37,0.12) 8px 12px);
+        }
+        .kitchen-queue-no {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: 0.04em;
+            font-variant-numeric: tabular-nums;
+            color: var(--kitchen-ink);
+        }
+        .kitchen-queue-no.pulse {
+            animation: kitchenPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes kitchenPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.88; }
+        }
+        .kitchen-lobby-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+        .kitchen-board-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .kitchen-pass-card {
+            background: #fff8ec;
+            color: #2f2a25;
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.2);
+            border-left: 5px solid var(--accent, #c9a9a6);
+        }
+        .kitchen-pass-card .pass-item {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 4px 0 8px;
+        }
+        .kitchen-pass-card .pass-meta {
+            font-size: 11px;
+            color: #8a847c;
+        }
+        .kitchen-pass-done {
+            width: 100%;
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--accent, #c9a9a6) 85%, #2a2622);
+            color: #2a2622;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .kitchen-pass-card.is-fading {
+            opacity: 0.35;
+            transform: scale(0.98);
+            transition: opacity .35s, transform .35s;
+        }
+        #orderBatchModeBar {
+            display: none;
+            margin-bottom: 10px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            background: color-mix(in srgb, var(--accent, #c9a9a6) 18%, #35302b);
+            border: 1px solid color-mix(in srgb, var(--accent, #c9a9a6) 35%, transparent);
+            color: #fff8ec;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+        #orderBatchModeBar.show { display: flex; }
+        .project-menu-section-title {
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.28em;
+            color: #8a847c;
+            margin: 14px 0 8px;
+            font-weight: 700;
+        }
+        .project-menu-combo-tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 1px 5px;
+            margin-right: 4px;
+            border-radius: 4px;
+            background: #3a3530;
+            color: #fff8ec;
+            letter-spacing: 0.08em;
+            vertical-align: middle;
+        }
+        #pickupSlipModal .pickup-slip-paper {
+            width: 280px;
+            max-width: 100%;
+            margin: 12px auto;
+            background: #fffdf8;
+            color: #3a3530;
+            font-family: 'Noto Sans SC', 'Courier New', monospace;
+            padding: 20px 16px 24px;
+            border-radius: 4px;
+            box-shadow: 0 12px 40px rgba(58,53,48,0.12);
+            text-align: center;
+        }
+        .pickup-slip-title {
+            font-size: 13px;
+            letter-spacing: 0.35em;
+            color: #8a847c;
+            margin-bottom: 6px;
+        }
+        .pickup-slip-no {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1;
+            margin: 8px 0;
+            font-variant-numeric: tabular-nums;
+        }
+        .combo-lines-editor {
+            border: 1px dashed #d4cdc3;
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #faf7f2;
+        }
+        .combo-line-row {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        .combo-line-row input {
+            flex: 1;
+            border: 1px solid #e5e0d8;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 13px;
+        }
+        .combo-line-row input.w-price { flex: 0 0 72px; }
+        .combo-line-row input.w-qty { flex: 0 0 52px; }
 
         /* ===== 主题色选择器 ===== */
         .theme-color-grid {
@@ -2606,10 +2925,10 @@
         </div>
 
         <!-- ===== 订单模块 ===== -->
-        <div id="orderTab" class="tab-content hidden">
-            <!-- 第一行：标题 + 新建按钮（模仿素材） -->
+        <div id="orderTab" class="tab-content hidden kitchen-station">
+            <!-- 第一行：标题 + 新建按钮 -->
             <div class="flex justify-between items-center mb-3">
-                <h2 class="text-lg font-semibold">订单管理</h2>
+                <h2 class="text-lg font-semibold kitchen-title"><i class="fas fa-fire mr-1"></i> 后厨 · 订单</h2>
                 <div class="flex flex-wrap gap-2 justify-end">
                     <button id="openProjectTemplateDrawerBtn"
                         class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm shadow transition-colors flex items-center gap-1">
@@ -2619,43 +2938,73 @@
                         class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm shadow transition-colors flex items-center gap-1">
                         <i class="fas fa-cog text-xs"></i> 加价服务
                     </button>
+                    <button id="startOrderBatchModeBtn"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm shadow transition-colors flex items-center gap-1">
+                        <i class="fas fa-layer-group text-xs"></i> 连续开单
+                    </button>
                     <button id="addScheduleBtn" class="bg-amber-600 text-white px-3 py-1 rounded-full text-sm shadow">
-                        <i class="fas fa-plus"></i> 新建订单
+                        <i class="fas fa-plus"></i> 新开单
                     </button>
                 </div>
             </div>
 
-            <!-- 第二行：统计 + 视图切换（完全模仿素材的 原价/实际价 + 网格/列表） -->
-            <div class="flex justify-between items-center mb-2">
+            <div id="orderBatchModeBar">
+                <span><i class="fas fa-layer-group mr-1"></i>连续开单中：平台 <strong id="orderBatchPlatformLabel">-</strong></span>
+                <span class="text-xs opacity-80">已开 <span id="orderBatchCount">0</span> 单 · Ctrl+S 保存并继续</span>
+                <button type="button" id="exitOrderBatchModeBtn" class="ml-auto text-xs underline opacity-90">退出</button>
+            </div>
+
+            <!-- 第二行：统计 + 视图切换 -->
+            <div class="flex justify-between items-center mb-2 gap-2 flex-wrap">
                 <div id="orderStats" class="price-stat flex-1 mr-2">
-                    <span>定金: ¥<span id="totalDeposit">0</span></span>
-                    <span>尾款: ¥<span id="totalFinalAmount">0</span></span>
-                    <span>总金额: ¥<span id="totalOrderAmount">0</span></span>
+                    <span>今日流水 · 定金 ¥<span id="totalDeposit">0</span></span>
+                    <span>尾款 ¥<span id="totalFinalAmount">0</span></span>
+                    <span>合计 ¥<span id="totalOrderAmount">0</span></span>
                 </div>
-                <div class="flex gap-3.5 ml-auto">
+                <div class="flex flex-wrap gap-2 ml-auto items-center">
                     <button id="scheduleViewVertical"
-                        class="layout-switch-btn text-sm px-3 py-1 rounded-full bg-gray-200 text-gray-600 shadow-sm hover:bg-gray-300 transition-colors"><i
+                        class="layout-switch-btn text-sm px-3 py-1 rounded-full shadow-sm"><i
                             class="fas fa-th text-xs"></i> 网格</button>
                     <button id="scheduleViewHorizontal"
-                        class="layout-switch-btn text-sm px-3 py-1 rounded-full bg-gray-700 text-white shadow-sm hover:bg-gray-300 transition-colors"><i
+                        class="layout-switch-btn text-sm px-3 py-1 rounded-full shadow-sm is-active"><i
                             class="fas fa-list text-xs"></i> 列表</button>
+                    <div class="relative" id="orderWorkbenchWrap">
+                        <button type="button" id="orderWorkbenchBtn"
+                            class="layout-switch-btn text-sm px-3 py-1 rounded-full shadow-sm"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-concierge-bell text-xs"></i>
+                            <span id="orderWorkbenchBtnLabel">工作台</span>
+                            <i class="fas fa-caret-down text-xs ml-0.5 opacity-70"></i>
+                        </button>
+                        <div id="orderWorkbenchMenu"
+                            class="hidden absolute right-0 mt-1 min-w-[7.5rem] bg-white border border-gray-200 rounded-xl shadow-lg py-1 z-20">
+                            <button type="button" id="scheduleViewLobby"
+                                class="order-workbench-item w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                <i class="fas fa-bell text-xs mr-1"></i> 大厅
+                            </button>
+                            <button type="button" id="scheduleViewKitchen"
+                                class="order-workbench-item w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                <i class="fas fa-utensils text-xs mr-1"></i> 出餐
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- 第三行：状态筛选（和素材的分类筛选一致） -->
-            <div class="flex flex-wrap gap-2 mb-3">
+            <!-- 第三行：状态筛选（大厅/出餐时隐藏） -->
+            <div id="orderFilterRow" class="flex flex-wrap gap-2 mb-3">
                 <button data-filter-order="all"
-                    class="order-filter-btn px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm">全部</button>
+                    class="order-filter-btn is-active px-3 py-1 rounded-full text-sm">全部</button>
                 <button data-filter-order="active"
-                    class="order-filter-btn px-3 py-1 rounded-full bg-gray-200 text-gray-600 text-sm">进行中</button>
+                    class="order-filter-btn px-3 py-1 rounded-full text-sm">制作中</button>
                 <button data-filter-order="completed"
-                    class="order-filter-btn px-3 py-1 rounded-full bg-gray-200 text-gray-600 text-sm">已完成</button>
+                    class="order-filter-btn px-3 py-1 rounded-full text-sm">已出餐</button>
                 <button data-filter-order="overdue"
-                    class="order-filter-btn px-3 py-1 rounded-full bg-gray-200 text-gray-600 text-sm">逾期</button>
+                    class="order-filter-btn px-3 py-1 rounded-full text-sm">超时</button>
             </div>
 
-            <!-- 第四行：搜索 + 排序（和素材完全一样） -->
-            <div class="flex gap-2 mb-3">
+            <!-- 第四行：搜索 + 排序（大厅/出餐时隐藏） -->
+            <div id="orderSearchRow" class="flex gap-2 mb-3">
                 <input type="text" id="orderSearch" placeholder="搜索订单名称/平台/要求"
                     class="flex-1 border rounded-xl px-3 py-1.5 text-sm">
                 <select id="orderSort" class="border rounded-xl px-3 py-1.5 text-sm">
@@ -2756,7 +3105,11 @@
                 <!-- 标题行 -->
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm font-medium text-gray-700">售卖类型</span>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 flex-wrap justify-end">
+                        <button type="button" id="toggleWenyouModeBtn"
+                            class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm shadow">
+                            <i class="fas fa-book-open"></i> 文游美工
+                        </button>
                         <button id="openSellTagDrawerBtn"
                             class="bg-gray-700 text-white px-3 py-1 rounded-full text-sm shadow">
                             <i class="fas fa-tags"></i> 标签
@@ -3002,7 +3355,7 @@
                         <i class="fas fa-bullhorn"></i> 更新公告
                     </button>
                 </div>
-                <p class="text-xs text-gray-400 mb-0">最新更新：2026-08-14</p>
+                <p class="text-xs text-gray-400 mb-0">最新更新：2026-08-14（第三次）</p>
             </div>
             <div class="card p-5 mb-4">
                 <h2 class="text-xl font-bold mb-4">数据管理</h2>
@@ -3315,15 +3668,26 @@
         <div id="projectTemplateList" class="space-y-2"></div>
     </div>
 
-    <div id="projectTemplateModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-5">
+    <div id="projectTemplateModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-md w-full p-5">
             <h3 id="projectTemplateModalTitle" class="text-xl font-bold mb-3">项目模板</h3>
-            <label class="block text-sm font-medium mb-1">项目名称 *</label>
-            <input type="text" id="projectTemplateName" placeholder="例如：海报设计"
+            <div class="flex gap-3 mb-3 text-sm">
+                <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="projectTemplateKind" value="single" checked> 单品</label>
+                <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="projectTemplateKind" value="combo"> 套餐</label>
+            </div>
+            <label class="block text-sm font-medium mb-1">名称 *</label>
+            <input type="text" id="projectTemplateName" placeholder="例如：海报设计 / 基础套餐"
                 class="w-full border rounded-xl p-2 mb-2">
-            <label class="block text-sm font-medium mb-1">单价 *</label>
-            <input type="number" id="projectTemplatePrice" placeholder="0.00" step="0.01"
-                class="w-full border rounded-xl p-2 mb-2">
+            <div id="projectTemplateSingleFields">
+                <label class="block text-sm font-medium mb-1">单价 *</label>
+                <input type="number" id="projectTemplatePrice" placeholder="0.00" step="0.01"
+                    class="w-full border rounded-xl p-2 mb-2">
+            </div>
+            <div id="projectTemplateComboFields" class="hidden">
+                <label class="block text-sm font-medium mb-1">套餐内项目</label>
+                <div id="comboLinesEditor" class="combo-lines-editor"></div>
+                <button type="button" id="addComboLineBtn" class="text-sm text-indigo-600 mb-2"><i class="fas fa-plus"></i> 加一行</button>
+            </div>
             <label class="block text-sm font-medium mb-1">备注（可选）</label>
             <input type="text" id="projectTemplateRemark" placeholder="例如：含一次修改"
                 class="w-full border rounded-xl p-2 mb-2">
@@ -3941,16 +4305,22 @@
                 </div>
             </div>
 
-            <!-- 8. 定金 & 尾款（一行两个） -->
+            <!-- 8. 定金 & 尾款（一行两个） + 收款章 -->
             <div class="flex gap-2 mb-2 mt-3">
                 <div class="w-1/2">
                     <label class="block text-sm font-medium mb-1">定金</label>
                     <input type="number" id="scheduleDeposit" placeholder="0.00" class="w-full border rounded-xl p-2">
+                    <label class="mt-1 flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+                        <input type="checkbox" id="scheduleDepositPaid" class="rounded"> 定金已收
+                    </label>
                 </div>
                 <div class="w-1/2">
                     <label class="block text-sm font-medium mb-1">尾款</label>
                     <input type="number" id="scheduleFinalAmount" placeholder="0.00"
                         class="w-full border rounded-xl p-2">
+                    <label class="mt-1 flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer">
+                        <input type="checkbox" id="scheduleFinalPaid" class="rounded"> 尾款已收
+                    </label>
                 </div>
             </div>
 
@@ -3982,10 +4352,15 @@
                 <button class="toggle-float-btn" id="toggleFloatBtn">🔁 悬浮模式</button>
             </div>
             <div id="scheduleDetailContent" class="space-y-3"></div>
-            <div class="flex justify-end gap-2 mt-4">
+            <div class="flex flex-wrap justify-end gap-2 mt-4">
                 <button id="openReceiptFromDetailBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-full text-sm">
                     <i class="fas fa-receipt"></i> 生成小票
                 </button>
+                <button id="openPickupSlipFromDetailBtn" class="px-4 py-2 bg-amber-700 text-white rounded-full text-sm">
+                    <i class="fas fa-ticket"></i> 取件条
+                </button>
+                <button id="toggleDepositPaidBtn" class="px-3 py-2 bg-gray-200 text-gray-700 rounded-full text-sm">定金章</button>
+                <button id="toggleFinalPaidBtn" class="px-3 py-2 bg-gray-200 text-gray-700 rounded-full text-sm">尾款章</button>
                 <button id="closeScheduleDetailBtn" class="px-4 py-2 bg-gray-300 rounded-full">关闭</button>
             </div>
         </div>
@@ -4009,6 +4384,26 @@
                     <i class="fas fa-download"></i> 导出图片
                 </button>
                 <button type="button" id="closeOrderReceiptBtn2" class="px-4 py-2 bg-gray-300 rounded-full text-sm">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 交稿取件条 -->
+    <div id="pickupSlipModal"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center hidden p-4 overflow-y-auto"
+        style="z-index: 80;">
+        <div class="bg-[#f0ebe4] rounded-2xl max-w-sm w-full max-h-[90vh] overflow-y-auto p-4">
+            <div class="flex justify-between items-center mb-3 px-1">
+                <h3 class="text-lg font-bold">交稿取件条</h3>
+                <button type="button" id="closePickupSlipBtn" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            </div>
+            <div id="pickupSlipPaper" class="pickup-slip-paper"></div>
+            <div class="flex flex-wrap justify-end gap-2 mt-4 px-1">
+                <button type="button" id="exportPickupSlipBtn"
+                    class="px-4 py-2 bg-indigo-600 text-white rounded-full text-sm">
+                    <i class="fas fa-download"></i> 导出图片
+                </button>
+                <button type="button" id="closePickupSlipBtn2" class="px-4 py-2 bg-gray-300 rounded-full text-sm">关闭</button>
             </div>
         </div>
     </div>
@@ -4040,6 +4435,7 @@
         <div class="bg-white rounded-2xl max-w-md w-full max-h-[85vh] overflow-y-auto p-5">
             <h3 id="sellTypeModalTitle" class="text-xl font-bold mb-3">新增售卖类型</h3>
 
+            <div id="sellTypeNormalFields">
             <label class="block text-sm font-medium mb-1">一级分类 *</label>
             <input type="text" id="sellTypeLevel1" placeholder="输入或选择一级分类" class="w-full border rounded-xl p-2 mb-2"
                 list="sellTypeLevel1List">
@@ -4053,11 +4449,6 @@
             <!-- 三级名称（必填） -->
             <label class="block text-sm font-medium mb-1">三级名称 *</label>
             <input type="text" id="sellTypeLevel3" placeholder="例如：书封" class="w-full border rounded-xl p-2 mb-2">
-
-            <!-- 单价 -->
-            <label class="block text-sm font-medium mb-1">单价 *</label>
-            <input type="number" id="sellTypePrice" placeholder="0.00" step="0.01"
-                class="w-full border rounded-xl p-2 mb-2">
 
             <!-- 库存管理开关 -->
             <div class="mb-2 flex items-center gap-3">
@@ -4088,6 +4479,54 @@
             <!-- 备注 -->
             <label class="block text-sm font-medium mb-1">备注</label>
             <textarea id="sellTypeRemark" rows="2" class="w-full border rounded-xl p-2" placeholder="备注信息"></textarea>
+            </div>
+
+            <div id="sellTypeWenyouFields" class="hidden">
+                <label for="wenyouCarName" class="block text-sm font-medium mb-1">车名 *</label>
+                <input type="text" id="wenyouCarName" name="wenyouCarName" autocomplete="off"
+                    placeholder="例如：某某车" class="w-full border rounded-xl p-2 mb-2">
+                <label for="wenyouCategorySelect" class="block text-sm font-medium mb-1">类型 *</label>
+                <select id="wenyouCategorySelect" name="wenyouCategory" autocomplete="off"
+                    class="w-full border rounded-xl p-2 mb-2"></select>
+                <label for="wenyouKindSelect" class="block text-sm font-medium mb-1">限售方式 *</label>
+                <select id="wenyouKindSelect" name="wenyouKind" autocomplete="off"
+                    class="w-full border rounded-xl p-2 mb-2">
+                    <option value="限时">限时</option>
+                    <option value="限量">限量</option>
+                    <option value="限量转限时">限量转限时</option>
+                </select>
+                <div id="wenyouLimitedTimeGroup" class="mb-2 hidden">
+                    <label class="block text-sm font-medium mb-1">限时时间 *</label>
+                    <input type="datetime-local" id="wenyouLimitedUntil" class="w-full border rounded-xl p-2">
+                </div>
+                <div id="wenyouQuotaGroup" class="mb-2 hidden">
+                    <label class="block text-sm font-medium mb-1">份数 *</label>
+                    <input type="number" id="wenyouQuota" min="1" value="1" class="w-full border rounded-xl p-2">
+                </div>
+                <div id="wenyouRemainGroup" class="mb-2 hidden">
+                    <label class="block text-sm font-medium mb-1">余量份数 *</label>
+                    <input type="number" id="wenyouRemain" min="0" value="0" class="w-full border rounded-xl p-2">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">授权名单</label>
+                    <button type="button" id="openWenyouAuthModalBtn"
+                        class="w-full border border-dashed border-amber-300 bg-amber-50/80 hover:bg-amber-50 text-amber-900 rounded-xl px-3 py-2.5 text-sm flex items-center justify-between">
+                        <span><i class="fas fa-address-book mr-1"></i> 管理授权名单</span>
+                        <span id="wenyouAuthCountBadge" class="text-xs bg-white/80 px-2 py-0.5 rounded-full text-gray-600">0 人</span>
+                    </button>
+                    <p class="text-[11px] text-gray-400 mt-1">名单可能很长，点进去搜索/添加/导入</p>
+                </div>
+            </div>
+
+            <!-- 单价（共用） -->
+            <label class="block text-sm font-medium mb-1">单价 *</label>
+            <input type="number" id="sellTypePrice" placeholder="0.00" step="0.01"
+                class="w-full border rounded-xl p-2 mb-1">
+            <div id="wenyouCarAmountBox" class="hidden text-sm text-gray-600 mb-2 space-y-0.5">
+                <div>本车金额：<span id="wenyouCarAmount" class="font-bold text-indigo-600">¥0.00</span>
+                    <span class="text-xs text-gray-400">（名单总份数 × 单价）</span></div>
+                <div id="wenyouStockLine" class="text-xs text-gray-500">库存：-</div>
+            </div>
 
             <!-- 上传图片 -->
             <div class="mb-2">
@@ -4104,6 +4543,68 @@
             <div class="flex justify-end gap-2 mt-3">
                 <button id="closeSellTypeModal" class="px-4 py-2 bg-gray-300 rounded-full">取消</button>
                 <button id="saveSellTypeBtn" class="px-4 py-2 bg-indigo-600 text-white rounded-full">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文游授权名单（独立弹窗） -->
+    <div id="wenyouAuthModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden p-4 overflow-y-auto" style="z-index: 85;">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col p-4">
+            <div class="flex justify-between items-start gap-2 mb-2">
+                <div>
+                    <h3 id="wenyouAuthModalTitle" class="text-lg font-bold">授权名单</h3>
+                    <p id="wenyouAuthModalSub" class="text-xs text-gray-400 mt-0.5">表格批量填写；可从 Excel 复制后在表内粘贴</p>
+                </div>
+                <button type="button" id="closeWenyouAuthModalBtn" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            </div>
+            <div class="flex gap-2 mb-2">
+                <input type="text" id="wenyouAuthSearch" placeholder="搜索平台 / id / QQ / 自用 / 赞待"
+                    class="flex-1 border rounded-xl px-3 py-1.5 text-sm">
+            </div>
+            <div id="wenyouAuthEditToolbar" class="flex flex-wrap gap-2 mb-2 items-center">
+                <button type="button" id="wenyouAuthAddBtn" class="text-xs px-3 py-1.5 rounded-full bg-gray-200">+ 添加行</button>
+                <span class="text-[11px] text-gray-400">列：平台 · id · qq · 份数 · 自用/赞待；自用可转让，赞待可赞助</span>
+            </div>
+            <div id="wenyouAuthList" class="flex-1 min-h-[220px]"></div>
+            <div class="flex justify-between items-center mt-3 gap-2">
+                <span id="wenyouAuthModalStat" class="text-xs text-gray-500"></span>
+                <button type="button" id="closeWenyouAuthModalBtn2" class="px-4 py-2 bg-indigo-600 text-white rounded-full text-sm">完成</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 被赞待：查看赞助人 -->
+    <div id="wenyouSponsorInfoModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden p-4" style="z-index: 100;">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5">
+            <h3 class="text-lg font-bold mb-2">赞助人信息</h3>
+            <div id="wenyouSponsorInfoBody" class="text-sm text-gray-700 space-y-1 mb-4"></div>
+            <div class="flex justify-end">
+                <button type="button" id="closeWenyouSponsorInfoBtn" class="px-4 py-2 bg-gray-300 rounded-full text-sm">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 文游：转让/赞助给别人（需盖过授权名单弹窗） -->
+    <div id="wenyouTransferModal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden p-4" style="z-index: 95;">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5">
+            <h3 id="wenyouGiveTitle" class="text-xl font-bold mb-2">转让给别人</h3>
+            <p id="wenyouTransferInfo" class="text-sm text-gray-600 mb-3"></p>
+            <label class="block text-sm font-medium mb-1">对方平台 *</label>
+            <select id="wenyouGivePlatform" class="w-full border rounded-xl p-2 mb-2">
+                <option value="">选择平台</option>
+                <option value="易次元">易次元</option>
+                <option value="橙光">橙光</option>
+                <option value="闪艺">闪艺</option>
+                <option value="全平台">全平台</option>
+            </select>
+            <label class="block text-sm font-medium mb-1">对方 id *</label>
+            <input type="text" id="wenyouGiveUserId" class="w-full border rounded-xl p-2 mb-2" placeholder="对方平台 id">
+            <label class="block text-sm font-medium mb-1">对方 QQ *</label>
+            <input type="text" id="wenyouGiveQq" class="w-full border rounded-xl p-2 mb-3" placeholder="对方 QQ">
+            <p class="text-[11px] text-gray-400 mb-3">从当前名单扣 1 份给对方；自用→转让，赞待→赞助；对方若已是「收的」会提示重复</p>
+            <div class="flex justify-end gap-2">
+                <button type="button" id="closeWenyouTransferBtn" class="px-4 py-2 bg-gray-300 rounded-full">取消</button>
+                <button type="button" id="confirmWenyouTransferBtn" class="px-4 py-2 bg-green-600 text-white rounded-full">确认</button>
             </div>
         </div>
     </div>
@@ -4338,6 +4839,12 @@
         let currentSellTypeEditId = null;
         let schedulePendingImages = [];
         let sellTypePendingImages = [];
+        let sellWenyouMode = localStorage.getItem('sellWenyouMode') === '1';
+        const WENYOU_CATEGORY_PRESETS = ['伪CG', '封面', '打光', '空镜', '头像框', '表白卡', '卡集', 'LOGO'];
+        const WENYOU_PLATFORMS = ['易次元', '橙光', '闪艺', '全平台'];
+        let wenyouAuthDraft = [];
+        let wenyouTransferCtx = null; // { sellTypeId, fromAuthId, action }
+        let wenyouAuthModalCtx = { mode: 'draft', sellTypeId: null }; // draft | view
         let currentOrderFilter = "all",
             currentOrderSort = "deadline_asc";
         let currentFinanceDataView = "all";
@@ -4359,6 +4866,8 @@
         let quickTransferMaterialId = null;
         let currentLayout = "list";
         let currentScheduleView = 'horizontal';
+        let orderBatchMode = null; // { platform, count }
+        let currentPickupSchedule = null;
         const DB_NAME = 'MaterialShopDB_Final_V2';
         const DB_VERSION = 5;
         let serviceTemplates = [];  // 加价服务模板列表
@@ -4382,6 +4891,17 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#39;');
+        }
+
+        /** 金额统一转数字，避免字符串相加 / 浮点乱码 */
+        function moneyNum(v) {
+            if (typeof v === 'number') return Number.isFinite(v) ? v : 0;
+            if (v == null || v === '') return 0;
+            const n = parseFloat(String(v).replace(/[￥¥,\s]/g, '').trim());
+            return Number.isFinite(n) ? n : 0;
+        }
+        function moneyFmt(v) {
+            return moneyNum(v).toFixed(2);
         }
 
         // ======================== 通用弹窗 ========================
@@ -5026,9 +5546,13 @@
             if (!select) return;
             const cur = select.value;
             select.innerHTML = '<option value="">选择项目模板...</option>' +
-                projectTemplates.map(t =>
-                    `<option value="${t.id}">${escapeHtml(t.name)} · ¥${Number(t.price || 0).toFixed(2)}</option>`
-                ).join('');
+                projectTemplates.map(t => {
+                    const isCombo = t.kind === 'combo' || (Array.isArray(t.comboItems) && t.comboItems.length);
+                    const priceLabel = isCombo
+                        ? `套餐 · ${ (t.comboItems || []).length }项`
+                        : `¥${Number(t.price || 0).toFixed(2)}`;
+                    return `<option value="${t.id}">${isCombo ? '【套】' : ''}${escapeHtml(t.name)} · ${priceLabel}</option>`;
+                }).join('');
             if (cur && projectTemplates.some(t => String(t.id) === String(cur))) select.value = cur;
         }
 
@@ -5048,17 +5572,23 @@
                 container.innerHTML = '<div class="text-center text-gray-400 py-4 text-sm">暂无项目模板<br><span class="text-xs">点击上方新增常用项目</span></div>';
                 return;
             }
-            container.innerHTML = filtered.map(t => `
+            container.innerHTML = filtered.map(t => {
+                const isCombo = t.kind === 'combo' || (Array.isArray(t.comboItems) && t.comboItems.length);
+                const sub = isCombo
+                    ? `套餐 ${(t.comboItems || []).length} 项` + (t.remark ? ' · ' + escapeHtml(t.remark) : '')
+                    : `¥${Number(t.price || 0).toFixed(2)}` + (t.remark ? ' · ' + escapeHtml(t.remark) : '');
+                return `
                 <div class="bg-gray-100 p-3 rounded-xl flex justify-between items-center gap-2">
                     <div class="min-w-0">
-                        <div class="font-bold text-sm truncate">${escapeHtml(t.name)}</div>
-                        <div class="text-xs text-gray-500 mt-0.5">¥${Number(t.price || 0).toFixed(2)}${t.remark ? ' · ' + escapeHtml(t.remark) : ''}</div>
+                        <div class="font-bold text-sm truncate">${isCombo ? '<span class="project-menu-combo-tag">套</span>' : ''}${escapeHtml(t.name)}</div>
+                        <div class="text-xs text-gray-500 mt-0.5">${sub}</div>
                     </div>
                     <div class="flex gap-1 flex-shrink-0">
                         <button class="edit-project-template text-blue-500 px-2 py-1 text-sm" data-id="${t.id}" title="编辑"><i class="fas fa-edit"></i></button>
                         <button class="delete-project-template text-red-500 px-2 py-1 text-sm" data-id="${t.id}" title="删除"><i class="fas fa-trash"></i></button>
                     </div>
-                </div>`).join('');
+                </div>`;
+            }).join('');
 
             container.querySelectorAll('.edit-project-template').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -5079,12 +5609,58 @@
             });
         }
 
+        function setProjectTemplateKindUI(kind) {
+            const isCombo = kind === 'combo';
+            document.querySelectorAll('input[name="projectTemplateKind"]').forEach(r => {
+                r.checked = r.value === (isCombo ? 'combo' : 'single');
+            });
+            document.getElementById('projectTemplateSingleFields')?.classList.toggle('hidden', isCombo);
+            document.getElementById('projectTemplateComboFields')?.classList.toggle('hidden', !isCombo);
+        }
+
+        function renderComboLinesEditor(lines) {
+            const editor = document.getElementById('comboLinesEditor');
+            if (!editor) return;
+            const rows = (lines && lines.length) ? lines : [{ name: '', price: '', qty: 1 }];
+            editor.innerHTML = rows.map((line, idx) => `
+                <div class="combo-line-row" data-idx="${idx}">
+                    <input type="text" class="combo-line-name" placeholder="项目名" value="${escapeHtml(line.name || '')}">
+                    <input type="number" class="combo-line-price w-price" placeholder="单价" step="0.01" value="${line.price ?? ''}">
+                    <input type="number" class="combo-line-qty w-qty" placeholder="数量" min="1" value="${line.qty || 1}">
+                    <button type="button" class="text-red-400 remove-combo-line" title="删除">×</button>
+                </div>`).join('');
+            editor.querySelectorAll('.remove-combo-line').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const row = btn.closest('.combo-line-row');
+                    row?.remove();
+                    if (!editor.querySelector('.combo-line-row')) renderComboLinesEditor([]);
+                });
+            });
+        }
+
+        function collectComboLinesFromEditor() {
+            const lines = [];
+            document.querySelectorAll('#comboLinesEditor .combo-line-row').forEach(row => {
+                const name = row.querySelector('.combo-line-name')?.value.trim() || '';
+                if (!name) return;
+                lines.push({
+                    name,
+                    price: parseFloat(row.querySelector('.combo-line-price')?.value) || 0,
+                    qty: parseInt(row.querySelector('.combo-line-qty')?.value) || 1
+                });
+            });
+            return lines;
+        }
+
         function openProjectTemplateModal(template = null) {
             currentProjectTemplateEditId = template?.id || null;
             document.getElementById('projectTemplateModalTitle').innerText = template ? '编辑项目模板' : '新增项目模板';
             document.getElementById('projectTemplateName').value = template?.name || '';
             document.getElementById('projectTemplatePrice').value = template?.price ?? '';
             document.getElementById('projectTemplateRemark').value = template?.remark || '';
+            const isCombo = template?.kind === 'combo' || (Array.isArray(template?.comboItems) && template.comboItems.length);
+            setProjectTemplateKindUI(isCombo ? 'combo' : 'single');
+            renderComboLinesEditor(isCombo ? (template.comboItems || []) : []);
             document.getElementById('projectTemplateModal').classList.remove('hidden');
         }
 
@@ -5095,16 +5671,25 @@
 
         async function saveProjectTemplate() {
             const name = document.getElementById('projectTemplateName').value.trim();
-            const price = parseFloat(document.getElementById('projectTemplatePrice').value);
             const remark = document.getElementById('projectTemplateRemark').value.trim();
+            const kind = document.querySelector('input[name="projectTemplateKind"]:checked')?.value || 'single';
             if (!name) { showCustomAlert('请填写项目名称'); return; }
-            if (isNaN(price) || price < 0) { showCustomAlert('请填写有效单价'); return; }
-            const data = { name, price, remark };
+            let data;
+            if (kind === 'combo') {
+                const comboItems = collectComboLinesFromEditor();
+                if (!comboItems.length) { showCustomAlert('请至少填写一个套餐项目'); return; }
+                const price = comboItems.reduce((s, it) => s + (Number(it.price) || 0) * (Number(it.qty) || 1), 0);
+                data = { name, price, remark, kind: 'combo', comboItems };
+            } else {
+                const price = parseFloat(document.getElementById('projectTemplatePrice').value);
+                if (isNaN(price) || price < 0) { showCustomAlert('请填写有效单价'); return; }
+                data = { name, price, remark, kind: 'single', comboItems: [] };
+            }
             if (currentProjectTemplateEditId) data.id = currentProjectTemplateEditId;
             await put('projectTemplates', data);
             closeProjectTemplateModal();
             await loadProjectTemplates();
-            showCustomAlert('项目模板已保存');
+            showToast('项目模板已保存');
         }
 
         function findProjectTemplateById(id) {
@@ -5125,6 +5710,31 @@
             qtyInput?.dispatchEvent(new Event('input', { bubbles: true }));
         }
 
+        function applyOneTemplateLineToOrder(line, templateId) {
+            const rows = Array.from(document.querySelectorAll('#scheduleItemsContainer .schedule-item-row'));
+            const emptyRow = rows.find(row => {
+                const name = row.querySelector('.schedule-type-search')?.value.trim() || '';
+                const price = row.querySelector('.schedule-price')?.value;
+                return !name && (price === '' || price == null);
+            });
+            const payload = {
+                name: line.name,
+                price: line.price,
+                qty: line.qty || 1,
+                projectTemplateId: templateId
+            };
+            if (emptyRow) {
+                fillScheduleItemRow(emptyRow, payload);
+                const qtyInput = emptyRow.querySelector('.schedule-qty');
+                if (qtyInput) qtyInput.value = payload.qty;
+                emptyRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                addScheduleItemRowWithSearch(payload);
+                const last = document.querySelector('#scheduleItemsContainer .schedule-item-row:last-child');
+                last?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
         function applyProjectTemplateToOrder() {
             const select = document.getElementById('orderProjectTemplateSelect');
             const raw = select?.value;
@@ -5137,28 +5747,16 @@
                 showCustomAlert('模板不存在，请重新打开订单后再试');
                 return;
             }
-            const rows = Array.from(document.querySelectorAll('#scheduleItemsContainer .schedule-item-row'));
-            const emptyRow = rows.find(row => {
-                const name = row.querySelector('.schedule-type-search')?.value.trim() || '';
-                const price = row.querySelector('.schedule-price')?.value;
-                return !name && (price === '' || price == null);
-            });
-            if (emptyRow) {
-                fillScheduleItemRow(emptyRow, template);
-                emptyRow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const isCombo = template.kind === 'combo' || (Array.isArray(template.comboItems) && template.comboItems.length);
+            if (isCombo) {
+                (template.comboItems || []).forEach(line => applyOneTemplateLineToOrder(line, template.id));
+                showToast(`已上桌套餐：${template.name}`);
             } else {
-                addScheduleItemRowWithSearch({
-                    name: template.name,
-                    price: template.price,
-                    qty: 1,
-                    projectTemplateId: template.id
-                });
-                const last = document.querySelector('#scheduleItemsContainer .schedule-item-row:last-child');
-                last?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                applyOneTemplateLineToOrder({ name: template.name, price: template.price, qty: 1 }, template.id);
+                showToast(`已选用：${template.name}`);
             }
             select.value = '';
             updateScheduleTotal();
-            showToast(`已选用：${template.name}`);
         }
 
         // ======================== 客户项目菜单 / 小票共用店铺信息 ========================
@@ -5233,17 +5831,42 @@
             if (!list.length) {
                 itemsHtml = '<div class="project-menu-desc" style="text-align:center;padding:12px 0;">暂无可展示项目，请先在项目模板里添加</div>';
             } else {
-                itemsHtml = list.map(t => {
+                const singles = list.filter(t => !(t.kind === 'combo' || (Array.isArray(t.comboItems) && t.comboItems.length)));
+                const combos = list.filter(t => t.kind === 'combo' || (Array.isArray(t.comboItems) && t.comboItems.length));
+                const renderItem = (t, combo) => {
                     const price = Number(t.price);
                     const priceStr = Number.isFinite(price) ? `¥${price.toFixed(2)}` : '-';
                     const desc = t.remark ? `<div class="project-menu-desc">${escapeHtml(t.remark)}</div>` : '';
+                    const tag = combo ? '<span class="project-menu-combo-tag">套</span>' : '';
                     return `<div class="project-menu-item">
                         <div class="project-menu-row">
-                            <span class="project-menu-name">${escapeHtml(t.name || '未命名')}</span>
+                            <span class="project-menu-name">${tag}${escapeHtml(t.name || '未命名')}</span>
                             <span class="project-menu-dots"></span>
                             <span class="project-menu-price">${priceStr}</span>
                         </div>
                         ${desc}
+                    </div>`;
+                };
+                itemsHtml = '';
+                if (singles.length) {
+                    itemsHtml += '<div class="project-menu-section-title">项 目</div>' + singles.map(t => renderItem(t, false)).join('');
+                }
+                if (combos.length) {
+                    itemsHtml += '<div class="project-menu-section-title">套 餐</div>' + combos.map(t => renderItem(t, true)).join('');
+                }
+            }
+            const services = (serviceTemplates || []).slice();
+            if (services.length) {
+                const opMap = { add: '+', subtract: '-', multiply: '×', divide: '÷' };
+                itemsHtml += '<div class="project-menu-section-title">加 价</div>' + services.map(s => {
+                    const op = opMap[s.operator] || s.operator || '';
+                    const label = `${op}${s.value ?? ''}`.trim() || (s.display || '');
+                    return `<div class="project-menu-item">
+                        <div class="project-menu-row">
+                            <span class="project-menu-name">${escapeHtml(s.name || '加价服务')}</span>
+                            <span class="project-menu-dots"></span>
+                            <span class="project-menu-price">${escapeHtml(label || '-')}</span>
+                        </div>
                     </div>`;
                 }).join('');
             }
@@ -5511,7 +6134,7 @@
             </div>
             <div class="divider"></div>
             <div class="grid grid-cols-2 gap-3">
-                <div><div class="label">金额</div><div class="value ${record.type === 'expense' ? 'text-red-600' : 'text-green-600'}">¥${record.amount}</div></div>
+                <div><div class="label">金额</div><div class="value ${record.type === 'expense' ? 'text-red-600' : 'text-green-600'}">¥${moneyFmt(record.amount)}</div></div>
                 <div><div class="label">日期</div><div class="value">${record.date}</div></div>
                 <div class="col-span-2"><div class="label">备注</div><div class="value">${record.remark || '无'}</div></div>
             </div>
@@ -6166,9 +6789,9 @@
                     totalAmount += deposit + final;
                 });
             }
-            document.getElementById('totalDeposit').innerText = totalDeposit.toFixed(2);
-            document.getElementById('totalFinalAmount').innerText = totalFinal.toFixed(2);
-            document.getElementById('totalOrderAmount').innerText = totalAmount.toFixed(2);
+            document.getElementById('totalDeposit').innerText = moneyFmt(totalDeposit);
+            document.getElementById('totalFinalAmount').innerText = moneyFmt(totalFinal);
+            document.getElementById('totalOrderAmount').innerText = moneyFmt(totalAmount);
         }
 
         // ======================== 辅助 ========================
@@ -8146,7 +8769,7 @@
                                 <span class="font-semibold text-sm">${f.type === 'expense' ? '支出' : '收入'}</span>
                                 <span class="ml-2 text-xs px-2 py-0.5 rounded-full ${f.type === 'expense' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}">${getFinanceTypeLabel(f)}</span>
                             </div>
-                            <span class="text-lg font-bold ${f.type === 'expense' ? 'text-red-600' : 'text-green-600'}">¥${f.amount}</span>
+                            <span class="text-lg font-bold ${f.type === 'expense' ? 'text-red-600' : 'text-green-600'}">¥${moneyFmt(f.amount)}</span>
                         </div>
                         <div class="text-sm text-gray-600 mt-1">${detail}</div>
                         <div class="text-xs text-gray-400 mt-1">${f.date} ${f.remark ? '| ' + f.remark : ''}</div>
@@ -8160,11 +8783,11 @@
             // 计算筛选后的总金额
             let totalIncome = 0, totalExpense = 0;
             for (let f of items) {
-                if (f.type === 'income') totalIncome += f.amount;
-                else if (f.type === 'expense') totalExpense += f.amount;
+                if (f.type === 'income') totalIncome += moneyNum(f.amount);
+                else if (f.type === 'expense') totalExpense += moneyNum(f.amount);
             }
-            document.getElementById('filteredIncome').innerText = '¥' + totalIncome.toFixed(2);
-            document.getElementById('filteredExpense').innerText = '¥' + totalExpense.toFixed(2);
+            document.getElementById('filteredIncome').innerText = '¥' + moneyFmt(totalIncome);
+            document.getElementById('filteredExpense').innerText = '¥' + moneyFmt(totalExpense);
             container.innerHTML = html;
             let paginationHtml = '<div class="flex justify-center gap-1 mt-3">';
             for (let i = 1; i <= totalPages; i++) {
@@ -8228,13 +8851,26 @@
                     incTotal = 0;
                 for (let f of currentFinances) {
                     if (f.date === dateStr && matchesTypeFilter(f)) {
-                        if (f.type === 'expense') expTotal += f.amount;
-                        else incTotal += f.amount;
+                        if (f.type === 'expense') expTotal += moneyNum(f.amount);
+                        else incTotal += moneyNum(f.amount);
                     }
                 }
                 expenseData.push(expTotal);
                 incomeData.push(incTotal);
                 cur.setDate(cur.getDate() + 1);
+            }
+            // 总收入/支出先于图表写入：起始→至今天数很多时图表可能失败，不能拖累汇总
+            {
+                let rangeExp = 0, rangeInc = 0;
+                for (let f of currentFinances) {
+                    if (f.date >= startDate && f.date <= endDate) {
+                        if (f.type === 'expense') rangeExp += moneyNum(f.amount);
+                        else if (f.type === 'income') rangeInc += moneyNum(f.amount);
+                    }
+                }
+                document.getElementById('rangeExpense').innerText = '¥' + moneyFmt(rangeExp);
+                document.getElementById('rangeIncome').innerText = '¥' + moneyFmt(rangeInc);
+                document.getElementById('rangeNet').innerText = '¥' + moneyFmt(rangeInc - rangeExp);
             }
             if (financeStatsChart) financeStatsChart.destroy();
             if (financeLineChart) financeLineChart.destroy();
@@ -8391,19 +9027,6 @@
                     }
                 }
             });
-            if (startDate && endDate) {
-                let rangeExp = 0,
-                    rangeInc = 0;
-                for (let f of currentFinances) {
-                    if (f.date >= startDate && f.date <= endDate) {
-                        if (f.type === 'expense') rangeExp += f.amount;
-                        else rangeInc += f.amount;
-                    }
-                }
-                document.getElementById('rangeExpense').innerText = `¥${rangeExp}`;
-                document.getElementById('rangeIncome').innerText = `¥${rangeInc}`;
-                document.getElementById('rangeNet').innerText = `¥${rangeInc - rangeExp}`;
-            }
         }
 
         // ===== saveExpense（原样保留） =====
@@ -10788,10 +11411,16 @@
                 }
                 // 状态筛选
                 if (statusFilter === 'soldout') {
-                    if (!item.enableInventory || (item.quantity || 0) > 0) return false;
+                    if (item.wenyou) {
+                        const ws = calcWenyouStock(item);
+                        if (!ws.enableInventory || !ws.soldOut) return false;
+                    } else if (!item.enableInventory || (item.quantity || 0) > 0) return false;
                 }
                 if (statusFilter === 'instock') {
-                    if (!item.enableInventory || (item.quantity || 0) <= 0) return false;
+                    if (item.wenyou) {
+                        const ws = calcWenyouStock(item);
+                        if (!ws.enableInventory || ws.soldOut) return false;
+                    } else if (!item.enableInventory || (item.quantity || 0) <= 0) return false;
                 }
                 return true;
             });
@@ -10862,7 +11491,20 @@
 
                     subItems.forEach(item => {
                         const isChecked = selectedSellTypeIds.has(item.id);
-                        const isSoldOut = item.enableInventory && (item.quantity || 0) <= 0;
+                        let isSoldOut = item.enableInventory && (item.quantity || 0) <= 0;
+                        let stockBadge = '';
+                        if (item.wenyou) {
+                            const ws = calcWenyouStock(item);
+                            isSoldOut = ws.enableInventory && ws.soldOut;
+                            if (ws.enableInventory) {
+                                stockBadge = isSoldOut
+                                    ? '<span class="badge badge-soldout text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">售罄</span>'
+                                    : `<span class="badge text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">库存 ${ws.quantity}</span>`;
+                            }
+                        } else {
+                            stockBadge = (item.enableInventory ? `<span class="badge text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">库存 ${item.quantity || 0}</span>` : '')
+                                + (isSoldOut ? '<span class="badge badge-soldout text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">告罄</span>' : '');
+                        }
 
                         html += `
         <div class="sell-type-item-card bg-white border border-gray-200/60 rounded-md p-2 hover:border-gray-300 transition ${isSoldOut ? 'opacity-50' : ''}" data-id="${item.id}" style="cursor:pointer;">
@@ -10872,10 +11514,10 @@
                 <span class="item-price text-sm font-semibold text-gray-700">¥${item.price}</span>
             </div>
             <div class="item-meta flex items-center gap-1 flex-wrap text-xs text-gray-400 mt-0.5">
-                ${item.enableInventory ? `<span class="badge text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">库存 ${item.quantity || 0}</span>` : ''}
-                ${isSoldOut ? '<span class="badge badge-soldout text-[10px] px-1.5 py-0.5 rounded-full bg-red-100 text-red-600">告罄</span>' : ''}
+                ${item.wenyou ? `<span class="badge text-[10px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800">${escapeHtml(item.wenyouKind || '文游')}</span>` : ''}
+                ${stockBadge}
             </div>
-            ${item.tags && item.tags.length ? `<div class="item-tags flex flex-wrap gap-1 mt-0.5">${item.tags.slice(0, 2).map(t => `<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+            ${(!item.wenyou && item.tags && item.tags.length) ? `<div class="item-tags flex flex-wrap gap-1 mt-0.5">${item.tags.slice(0, 2).map(t => `<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">${escapeHtml(t)}</span>`).join('')}</div>` : (item.wenyou && item.wenyouCategory ? `<div class="item-tags flex flex-wrap gap-1 mt-0.5"><span class="text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500">${escapeHtml(item.wenyouCategory)}</span></div>` : '')}
             <div class="flex gap-1 mt-1 justify-end">
                 <button class="editSellType text-gray-400 hover:text-blue-500 text-xs p-0.5" data-id="${item.id}" onclick="event.stopPropagation();"><i class="fas fa-edit"></i></button>
                 <button class="deleteSellType text-gray-400 hover:text-red-500 text-xs p-0.5" data-id="${item.id}" onclick="event.stopPropagation();"><i class="fas fa-trash"></i></button>
@@ -11025,9 +11667,21 @@
                 <div><div class="label">一级分类</div><div class="value">${escapeHtml(st.level1 || '无')}</div></div>
                 <div><div class="label">二级分类</div><div class="value">${escapeHtml(st.level2 || '无')}</div></div>
                 <div><div class="label">单价</div><div class="value text-purple-600 font-bold">¥${st.price}</div></div>
-                <div><div class="label">库存管理</div><div class="value">${st.enableInventory ? (st.quantity <= 0 ? '<span class="text-red-500">已启用（已告罄）</span>' : '<span class="text-green-600">已启用</span>') : '<span class="text-gray-400">未启用（不限量）</span>'}</div></div>
+                <div><div class="label">库存管理</div><div class="value">${(() => {
+                    if (st.wenyou) {
+                        const ws = calcWenyouStock(st);
+                        if (!ws.enableInventory) return '<span class="text-gray-400">限时不限库存</span>';
+                        return ws.soldOut ? '<span class="text-red-500">售罄</span>' : '<span class="text-green-600">有库存</span>';
+                    }
+                    return st.enableInventory ? (st.quantity <= 0 ? '<span class="text-red-500">已启用（已告罄）</span>' : '<span class="text-green-600">已启用</span>') : '<span class="text-gray-400">未启用（不限量）</span>';
+                })()}</div></div>
     `;
-            if (st.enableInventory) {
+            if (st.wenyou) {
+                const ws = calcWenyouStock(st);
+                if (ws.enableInventory) {
+                    content += `<div><div class="label">库存数量</div><div class="value">${ws.soldOut ? '<span class="text-red-600 font-bold">售罄</span>' : ws.quantity}<span class="text-xs text-gray-400">（${ws.base} - 名单${ws.authCopies}）</span></div></div>`;
+                }
+            } else if (st.enableInventory) {
                 content += `<div><div class="label">库存数量</div><div class="value">${st.quantity || 0}</div></div>`;
             }
             content += `</div>`;
@@ -11042,6 +11696,31 @@
                 content += `<div class="divider"></div><div><div class="label">图片</div><div class="flex flex-wrap gap-2 mt-1">${imagesHtml}</div></div>`;
             }
 
+            if (st.wenyou) {
+                content += `<div class="divider"></div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><div class="label">车名</div><div class="value">${escapeHtml(st.carName || st.level3 || st.name || '-')}</div></div>
+                        <div><div class="label">类型</div><div class="value">${escapeHtml(st.wenyouCategory || '-')}</div></div>
+                        <div><div class="label">限售方式</div><div class="value">${escapeHtml(st.wenyouKind || st.level2 || '-')}</div></div>
+                        ${st.wenyouKind === '限时' && st.limitedUntil ? `<div><div class="label">限时时间</div><div class="value">${escapeHtml(new Date(st.limitedUntil).toLocaleString())}</div></div>` : ''}
+                        ${st.wenyouKind === '限量' ? `<div><div class="label">份数</div><div class="value">${st.quota != null ? st.quota : (st.quantity || 0)}</div></div>` : ''}
+                        ${(st.wenyouKind === '限量转限时' || st.wenyouKind === '限时转限量') ? `<div><div class="label">余量份数</div><div class="value">${st.remain != null ? st.remain : (st.quantity || 0)}</div></div>` : ''}
+                    </div>`;
+                const list = Array.isArray(st.authList) ? st.authList : [];
+                const totalCopies = sumWenyouAuthCopies(list);
+                const carAmt = moneyNum(st.price) * totalCopies;
+                content += `<div class="divider"></div>
+                    <div><div class="label">本车金额</div><div class="value text-indigo-600 font-bold">¥${moneyFmt(carAmt)}</div>
+                    <div class="text-xs text-gray-400">名单 ${totalCopies} 份 × 单价 ¥${moneyFmt(st.price)}</div></div>`;
+                content += `<div class="divider"></div>
+                    <div class="label mb-2">授权名单</div>
+                    <button type="button" class="w-full border border-dashed rounded-xl px-3 py-2 text-sm text-left bg-amber-50/60 hover:bg-amber-50"
+                        onclick="event.stopPropagation();window.openWenyouAuthModal&&window.openWenyouAuthModal({mode:'view',sellTypeId:'${st.id}'})">
+                        <i class="fas fa-address-book mr-1"></i> 查看授权名单（${list.length} 人 · ${totalCopies} 份）
+                        <span class="text-xs text-gray-400 block mt-0.5">支持搜索 / 转让 / 赞助</span>
+                    </button>`;
+            }
+
             content += `</div>`;
 
             document.getElementById('sellTypeDetailContent').innerHTML = content;
@@ -11053,6 +11732,640 @@
         // ======================== 售卖类型管理 ========================
 
         // 正确版本：openSellTypeModal（不含嵌套）
+
+        // ======================== 文游美工模式 ========================
+        function isSellWenyouMode() {
+            return !!sellWenyouMode;
+        }
+
+        function updateWenyouModeButton() {
+            const btn = document.getElementById('toggleWenyouModeBtn');
+            if (!btn) return;
+            btn.classList.toggle('wy-mode-on', sellWenyouMode);
+            btn.innerHTML = sellWenyouMode
+                ? '<i class="fas fa-book-open"></i> 文游美工 · 开'
+                : '<i class="fas fa-book-open"></i> 文游美工';
+            // 文游模式不用普通售卖标签按钮
+            const tagBtn = document.getElementById('openSellTagDrawerBtn');
+            if (tagBtn) tagBtn.classList.toggle('hidden', !!sellWenyouMode);
+        }
+
+        async function ensureWenyouAutoTags() {
+            // 文游不写入普通售卖标签
+            return;
+        }
+
+        async function toggleSellWenyouMode() {
+            sellWenyouMode = !sellWenyouMode;
+            localStorage.setItem('sellWenyouMode', sellWenyouMode ? '1' : '0');
+            updateWenyouModeButton();
+            if (sellWenyouMode) {
+                await ensureWenyouAutoTags();
+                showToast('已开启文游美工模式');
+            } else {
+                showToast('已关闭文游美工模式');
+            }
+            // 若新建弹窗开着，同步切换表单
+            const modal = document.getElementById('sellTypeModal');
+            if (modal && !modal.classList.contains('hidden')) {
+                applySellTypeFormMode();
+                if (sellWenyouMode) fillWenyouCategoryOptions(document.getElementById('wenyouCategorySelect')?.value || '');
+            }
+        }
+
+        function applySellTypeFormMode(forceWy) {
+            const useWy = forceWy != null ? !!forceWy : !!sellWenyouMode;
+            window._sellTypeFormWy = useWy;
+            const normal = document.getElementById('sellTypeNormalFields');
+            const wy = document.getElementById('sellTypeWenyouFields');
+            if (normal) normal.classList.toggle('hidden', useWy);
+            if (wy) wy.classList.toggle('hidden', !useWy);
+            // 隐藏区禁用，避免浏览器把「三级名称」等和「车名/类型」串在一起自动填充
+            normal?.querySelectorAll('input, select, textarea, button').forEach(el => {
+                if (el.id === 'addSellTypeTagBtn') return;
+                el.disabled = !!useWy;
+            });
+            wy?.querySelectorAll('input, select, textarea, button').forEach(el => {
+                el.disabled = !useWy;
+            });
+            if (useWy) syncWenyouKindFields();
+        }
+
+        function normalizeWenyouKind(kind) {
+            const k = String(kind || '').trim();
+            if (k === '限时转限量') return '限量转限时';
+            return k || '限时';
+        }
+
+        function syncWenyouKindFields() {
+            const kind = normalizeWenyouKind(document.getElementById('wenyouKindSelect')?.value);
+            const timeG = document.getElementById('wenyouLimitedTimeGroup');
+            const quotaG = document.getElementById('wenyouQuotaGroup');
+            const remainG = document.getElementById('wenyouRemainGroup');
+            if (timeG) timeG.classList.toggle('hidden', kind !== '限时');
+            if (quotaG) quotaG.classList.toggle('hidden', kind !== '限量');
+            if (remainG) remainG.classList.toggle('hidden', kind !== '限量转限时');
+        }
+
+        function fillWenyouCategoryOptions(selected) {
+            const sel = document.getElementById('wenyouCategorySelect');
+            if (!sel) return;
+            const names = WENYOU_CATEGORY_PRESETS.slice();
+            const cur = names.includes(selected) ? selected : '';
+            sel.innerHTML = '<option value="">选择类型...</option>' +
+                names.map(n => `<option value="${escapeHtml(n)}"${n === cur ? ' selected' : ''}>${escapeHtml(n)}</option>`).join('');
+        }
+
+        function wenyouPlatformSelectHtml(selected) {
+            const cur = selected || '';
+            return '<select class="w-plat wy-auth-platform">' +
+                '<option value="">平台</option>' +
+                WENYOU_PLATFORMS.map(p =>
+                    `<option value="${escapeHtml(p)}"${p === cur ? ' selected' : ''}>${escapeHtml(p)}</option>`
+                ).join('') +
+                '</select>';
+        }
+
+        /** 文游库存 = 总份数(份数/余量) - 授权名单总份数；限时不记库存 */
+        function calcWenyouStock(stOrDraft) {
+            const kind = normalizeWenyouKind(stOrDraft.wenyouKind || stOrDraft.level2 || '');
+            if (kind === '限时' || !kind) return { enableInventory: false, quantity: 0, base: 0, authCopies: 0, soldOut: false };
+            const authCopies = sumWenyouAuthCopies(stOrDraft.authList || []);
+            let base = 0;
+            if (kind === '限量') base = Math.max(0, parseInt(stOrDraft.quota != null ? stOrDraft.quota : stOrDraft.quantity) || 0);
+            else if (kind === '限量转限时') base = Math.max(0, parseInt(stOrDraft.remain != null ? stOrDraft.remain : stOrDraft.quantity) || 0);
+            const quantity = Math.max(0, base - authCopies);
+            return { enableInventory: true, quantity, base, authCopies, soldOut: quantity <= 0 };
+        }
+
+        function updateWenyouAuthCountBadge() {
+            const badge = document.getElementById('wenyouAuthCountBadge');
+            if (!badge) return;
+            const n = (wenyouAuthDraft || []).length;
+            const copies = sumWenyouAuthCopies(wenyouAuthDraft);
+            badge.textContent = n + ' 人 · ' + copies + ' 份';
+        }
+
+        function getWenyouAuthModalList() {
+            if (wenyouAuthModalCtx.mode === 'view' && wenyouAuthModalCtx.sellTypeId != null) {
+                const st = sellTypes.find(t => String(t.id) === String(wenyouAuthModalCtx.sellTypeId));
+                return Array.isArray(st?.authList) ? st.authList : [];
+            }
+            return wenyouAuthDraft || [];
+        }
+
+        function openWenyouAuthModal(opts) {
+            opts = opts || {};
+            wenyouAuthModalCtx = {
+                mode: opts.mode === 'view' ? 'view' : 'draft',
+                sellTypeId: opts.sellTypeId != null ? opts.sellTypeId : null
+            };
+            const title = document.getElementById('wenyouAuthModalTitle');
+            const sub = document.getElementById('wenyouAuthModalSub');
+            const toolbar = document.getElementById('wenyouAuthEditToolbar');
+            const isView = wenyouAuthModalCtx.mode === 'view';
+            if (title) title.textContent = isView ? '授权名单（查看）' : '管理授权名单';
+            if (sub) {
+                const st = isView ? sellTypes.find(t => String(t.id) === String(wenyouAuthModalCtx.sellTypeId)) : null;
+                sub.textContent = isView
+                    ? ((st?.carName || st?.name || '') + ' · 自用可转让，赞待可赞助；被赞待可点开看赞助人')
+                    : '表格批量填写；可从 Excel 复制后在表内粘贴 · 平台：易次元/橙光/闪艺/全平台';
+            }
+            if (toolbar) toolbar.classList.toggle('hidden', isView);
+            const search = document.getElementById('wenyouAuthSearch');
+            if (search) search.value = '';
+            document.getElementById('wenyouAuthModal')?.classList.remove('hidden');
+            renderWenyouAuthEditor();
+        }
+
+        function closeWenyouAuthModal() {
+            document.getElementById('wenyouAuthModal')?.classList.add('hidden');
+            updateWenyouAuthCountBadge();
+            updateWenyouCarAmountDisplay();
+        }
+
+        function normalizeWenyouIntent(v) {
+            const s = String(v || '').trim();
+            if (s === 'zandai' || s === '赞待' || s === 'sponsor_pool') return 'zandai';
+            return 'self';
+        }
+
+        function wenyouIntentLabel(a) {
+            return normalizeWenyouIntent(a?.intent) === 'zandai' ? '赞待' : '自用';
+        }
+
+        function normalizeWenyouAuthEntry(r) {
+            let acquire = r.acquire || (r.sponsored ? 'sponsor' : 'buy');
+            if (acquire === 'received') acquire = 'transfer';
+            const intent = acquire === 'buy' ? normalizeWenyouIntent(r.intent) : (r.intent ? normalizeWenyouIntent(r.intent) : 'self');
+            const sponsoredBy = (acquire === 'sponsor' && r.sponsoredBy && typeof r.sponsoredBy === 'object')
+                ? {
+                    platform: (r.sponsoredBy.platform || '').trim(),
+                    userId: (r.sponsoredBy.userId || '').trim(),
+                    qq: (r.sponsoredBy.qq || '').trim()
+                }
+                : null;
+            return {
+                id: r.id || (Date.now() + Math.random()),
+                platform: (r.platform || '').trim(),
+                userId: (r.userId || '').trim(),
+                qq: (r.qq || '').trim(),
+                copies: Math.max(1, parseInt(r.copies) || 1),
+                intent,
+                acquire,
+                sponsored: acquire === 'sponsor',
+                sponsoredBy
+            };
+        }
+
+        function wenyouAuthKey(a) {
+            return [a.platform || '', a.userId || '', a.qq || ''].map(s => String(s).trim().toLowerCase()).join('|');
+        }
+
+        function isWenyouReceived(a) {
+            const ac = a.acquire || (a.sponsored ? 'sponsor' : 'buy');
+            return ac === 'transfer' || ac === 'sponsor' || !!a.sponsored;
+        }
+
+        function wenyouAcquireLabel(a) {
+            const ac = a.acquire || (a.sponsored ? 'sponsor' : 'buy');
+            if (ac === 'sponsor') return '收的·赞待';
+            if (ac === 'transfer') return '收的·转让';
+            return '自己买的·' + wenyouIntentLabel(a);
+        }
+
+        function canWenyouTransfer(a) {
+            return !isWenyouReceived(a) && normalizeWenyouIntent(a.intent) === 'self';
+        }
+
+        function canWenyouSponsor(a) {
+            return !isWenyouReceived(a) && normalizeWenyouIntent(a.intent) === 'zandai';
+        }
+
+        function sumWenyouAuthCopies(list) {
+            return (list || []).reduce((s, a) => s + (parseInt(a.copies) || 0), 0);
+        }
+
+        function updateWenyouCarAmountDisplay(list, price) {
+            const box = document.getElementById('wenyouCarAmountBox');
+            const el = document.getElementById('wenyouCarAmount');
+            const stockLine = document.getElementById('wenyouStockLine');
+            if (!box || !el) return;
+            const show = !!window._sellTypeFormWy;
+            box.classList.toggle('hidden', !show);
+            if (!show) return;
+            const authList = list != null ? list : (typeof collectWenyouAuthFromEditor === 'function' ? collectWenyouAuthFromEditor() : wenyouAuthDraft);
+            const copies = sumWenyouAuthCopies(authList);
+            const p = price != null ? moneyNum(price) : moneyNum(document.getElementById('sellTypePrice')?.value);
+            el.textContent = '¥' + moneyFmt(copies * p);
+            if (stockLine) {
+                const kind = normalizeWenyouKind(document.getElementById('wenyouKindSelect')?.value || '');
+                if (kind === '限时') {
+                    stockLine.textContent = '库存：限时不限库存';
+                } else {
+                    let base = 0;
+                    if (kind === '限量') base = Math.max(0, parseInt(document.getElementById('wenyouQuota')?.value) || 0);
+                    else if (kind === '限量转限时') base = Math.max(0, parseInt(document.getElementById('wenyouRemain')?.value) || 0);
+                    const left = Math.max(0, base - copies);
+                    stockLine.innerHTML = left <= 0
+                        ? '库存：<span class="text-red-600 font-bold">售罄</span>（' + base + ' - 名单' + copies + '）'
+                        : '库存：' + left + '（' + base + ' - 名单' + copies + '）';
+                }
+            }
+        }
+
+        function collectWenyouAuthFromEditor() {
+            return (wenyouAuthDraft || [])
+                .map(r => normalizeWenyouAuthEntry(r))
+                .filter(r => r.platform || r.userId || r.qq);
+        }
+
+        function addWenyouAuthRow(prefill) {
+            wenyouAuthDraft.push(normalizeWenyouAuthEntry(Object.assign({
+                id: Date.now() + Math.random(),
+                platform: '',
+                userId: '',
+                qq: '',
+                copies: 1,
+                intent: 'self',
+                acquire: 'buy',
+                sponsored: false
+            }, prefill || {})));
+            renderWenyouAuthEditor();
+            updateWenyouCarAmountDisplay();
+            updateWenyouAuthCountBadge();
+        }
+
+        function wenyouIntentSelectHtml(selected, disabled) {
+            const cur = normalizeWenyouIntent(selected);
+            const dis = disabled ? ' disabled' : '';
+            return `<select class="wy-auth-intent"${dis}>
+                <option value="self"${cur === 'self' ? ' selected' : ''}>自用</option>
+                <option value="zandai"${cur === 'zandai' ? ' selected' : ''}>赞待</option>
+            </select>`;
+        }
+
+        function openWenyouSponsorInfo(a) {
+            const body = document.getElementById('wenyouSponsorInfoBody');
+            const by = a && a.sponsoredBy;
+            if (!body) return;
+            if (!by || (!by.platform && !by.userId && !by.qq)) {
+                body.innerHTML = '<div class="text-gray-400">暂无赞助人信息（旧数据可能未记录）</div>';
+            } else {
+                body.innerHTML = `
+                    <div><span class="text-gray-400">平台</span>：${escapeHtml(by.platform || '-')}</div>
+                    <div><span class="text-gray-400">id</span>：${escapeHtml(by.userId || '-')}</div>
+                    <div><span class="text-gray-400">QQ</span>：${escapeHtml(by.qq || '-')}</div>`;
+            }
+            document.getElementById('wenyouSponsorInfoModal')?.classList.remove('hidden');
+        }
+
+        function closeWenyouSponsorInfo() {
+            document.getElementById('wenyouSponsorInfoModal')?.classList.add('hidden');
+        }
+
+        function parseWenyouSheetPasteLine(line) {
+            const raw = String(line || '').trim();
+            if (!raw || raw.startsWith('#')) return null;
+            // Excel 粘贴多为 Tab；也兼容逗号/空格
+            let parts = raw.includes('\t') ? raw.split('\t').map(s => s.trim()).filter((s, i, arr) => s || i < 3)
+                : raw.split(/[,，|]+/).map(s => s.trim()).filter(Boolean);
+            if (parts.length < 3) {
+                parts = raw.split(/[\s,，\t|]+/).filter(Boolean);
+            }
+            if (parts.length < 3) return { error: '字段不足' };
+            let plat = parts[0].trim();
+            if (!WENYOU_PLATFORMS.includes(plat)) return { error: '平台无效' };
+            let copies = 1;
+            let intent = 'self';
+            const rest = parts.slice(3);
+            rest.forEach(tok => {
+                if (/^\d+$/.test(tok)) copies = Math.max(1, parseInt(tok));
+                else if (tok === '赞待' || tok === 'zandai') intent = 'zandai';
+                else if (tok === '自用' || tok === 'self') intent = 'self';
+            });
+            return {
+                row: normalizeWenyouAuthEntry({
+                    id: Date.now() + Math.random(),
+                    platform: plat,
+                    userId: parts[1],
+                    qq: parts[2],
+                    copies,
+                    intent,
+                    acquire: 'buy'
+                })
+            };
+        }
+
+        function pasteWenyouAuthRows(textContent) {
+            const lines = String(textContent || '').split(/\r?\n/);
+            let n = 0, skip = 0;
+            lines.forEach(line => {
+                if (!String(line || '').trim()) return;
+                const parsed = parseWenyouSheetPasteLine(line);
+                if (parsed && parsed.row) {
+                    wenyouAuthDraft.push(parsed.row);
+                    n++;
+                } else skip++;
+            });
+            renderWenyouAuthEditor();
+            updateWenyouCarAmountDisplay();
+            updateWenyouAuthCountBadge();
+            if (n) showToast(`已粘贴 ${n} 行` + (skip ? `，跳过 ${skip} 行` : ''));
+            else showToast('没有识别到有效行（需：平台 id qq …）');
+        }
+
+        function renderWenyouAuthEditor() {
+            const box = document.getElementById('wenyouAuthList');
+            if (!box) return;
+            const isView = wenyouAuthModalCtx.mode === 'view';
+            const list = getWenyouAuthModalList();
+            const kw = (document.getElementById('wenyouAuthSearch')?.value || '').toLowerCase().trim();
+            const indexed = list.map((row, idx) => ({ row, idx })).filter(({ row }) => {
+                if (!kw) return true;
+                const blob = `${row.platform || ''} ${row.userId || ''} ${row.qq || ''} ${wenyouAcquireLabel(row)} ${wenyouIntentLabel(row)}`.toLowerCase();
+                return blob.includes(kw);
+            });
+            const stat = document.getElementById('wenyouAuthModalStat');
+            if (stat) {
+                const copies = sumWenyouAuthCopies(list);
+                stat.textContent = kw
+                    ? `显示 ${indexed.length} / 共 ${list.length} 人（总 ${copies} 份）`
+                    : `共 ${list.length} 人 · ${copies} 份`;
+            }
+            updateWenyouAuthCountBadge();
+
+            if (isView) {
+                const sid = wenyouAuthModalCtx.sellTypeId;
+                if (!list.length) {
+                    box.innerHTML = '<div class="text-xs text-gray-400 py-8 text-center">暂无名单</div>';
+                    return;
+                }
+                if (!indexed.length) {
+                    box.innerHTML = '<div class="text-xs text-gray-400 py-8 text-center">没有匹配的结果</div>';
+                    return;
+                }
+                box.innerHTML = `<div class="wy-auth-sheet-wrap"><table class="wy-auth-sheet"><thead><tr>
+                    <th>平台</th><th>id</th><th>QQ</th><th>份数</th><th>状态</th><th>操作</th>
+                </tr></thead><tbody>${indexed.map(({ row: a }) => {
+                    const received = isWenyouReceived(a);
+                    const isZandaiRecv = received && (a.acquire === 'sponsor' || a.sponsored);
+                    let stamp = '';
+                    if (isZandaiRecv) {
+                        stamp = `<button type="button" class="wy-sponsor-stamp is-btn" data-sponsor-info="1" data-aid="${a.id}">被赞待</button>`;
+                    } else if (received) {
+                        stamp = `<span class="wy-sponsor-stamp">被转让</span>`;
+                    }
+                    let actions = '';
+                    if (received) {
+                        actions = `<span class="text-[10px] text-gray-400">不可再转</span>`;
+                    } else if (canWenyouTransfer(a)) {
+                        actions = `<button type="button" class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs" data-give="transfer" data-sid="${sid}" data-aid="${a.id}">转让</button>`;
+                    } else if (canWenyouSponsor(a)) {
+                        actions = `<button type="button" class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs" data-give="sponsor" data-sid="${sid}" data-aid="${a.id}">赞助</button>`;
+                    } else {
+                        actions = `<span class="text-[10px] text-gray-400">-</span>`;
+                    }
+                    return `<tr>
+                        <td>${escapeHtml(a.platform || '-')}</td>
+                        <td>${escapeHtml(a.userId || '-')}</td>
+                        <td>${escapeHtml(a.qq || '-')}</td>
+                        <td>${a.copies || 1}</td>
+                        <td><div class="text-[11px] text-gray-600">${escapeHtml(wenyouAcquireLabel(a))} ${stamp}</div></td>
+                        <td class="col-act">${actions}</td>
+                    </tr>`;
+                }).join('')}</tbody></table></div>`;
+                box.querySelectorAll('[data-give]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openWenyouGiveModal(btn.dataset.sid, btn.dataset.aid, btn.dataset.give);
+                    });
+                });
+                box.querySelectorAll('[data-sponsor-info]').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const st = sellTypes.find(t => String(t.id) === String(sid));
+                        const a = (st?.authList || []).find(x => String(x.id) === String(btn.dataset.aid));
+                        if (a) openWenyouSponsorInfo(a);
+                    });
+                });
+                return;
+            }
+
+            // draft sheet
+            if (!list.length) {
+                box.innerHTML = '<div id="wenyouAuthSheetWrap" tabindex="0" class="wy-auth-sheet-wrap" style="min-height:180px;display:flex;align-items:center;justify-content:center;"><div class="text-xs text-gray-400 text-center px-4">暂无名单，点「添加行」或点击此处后 Ctrl+V 从 Excel 粘贴</div></div>';
+                updateWenyouCarAmountDisplay();
+                return;
+            }
+            if (!indexed.length) {
+                box.innerHTML = '<div class="text-xs text-gray-400 py-8 text-center">没有匹配的结果</div>';
+                return;
+            }
+            box.innerHTML = `<div class="wy-auth-sheet-wrap" id="wenyouAuthSheetWrap" tabindex="0"><table class="wy-auth-sheet"><thead><tr>
+                <th class="col-plat">平台</th><th class="col-id">id</th><th class="col-qq">QQ</th>
+                <th class="col-copies">份数</th><th class="col-intent">用途</th><th class="col-act"></th>
+            </tr></thead><tbody>${indexed.map(({ row, idx }) => {
+                const received = isWenyouReceived(row);
+                const lock = received ? ' disabled' : '';
+                const status = received
+                    ? ((row.acquire === 'sponsor' || row.sponsored)
+                        ? '<button type="button" class="wy-sponsor-stamp is-btn wy-draft-sponsor-info" data-idx="' + idx + '">被赞待</button>'
+                        : '<span class="wy-sponsor-stamp">被转让</span>')
+                    : '';
+                const platHtml = wenyouPlatformSelectHtml(row.platform || '');
+                return `<tr class="wy-auth-sheet-row" data-idx="${idx}">
+                    <td class="col-plat">${platHtml}</td>
+                    <td class="col-id"><input class="wy-auth-userid" placeholder="id" value="${escapeHtml(row.userId || '')}"${lock}></td>
+                    <td class="col-qq"><input class="wy-auth-qq" placeholder="qq" value="${escapeHtml(row.qq || '')}"${lock}></td>
+                    <td class="col-copies"><input class="wy-auth-copies" type="number" min="1" value="${row.copies || 1}"${lock}></td>
+                    <td class="col-intent">${received ? ('<span class="text-[11px] text-gray-500">' + escapeHtml(wenyouAcquireLabel(row)) + '</span> ' + status) : wenyouIntentSelectHtml(row.intent, false)}</td>
+                    <td class="col-act"><button type="button" class="text-red-400 wy-auth-remove text-xs" data-idx="${idx}">删</button></td>
+                </tr>`;
+            }).join('')}</tbody></table></div>
+            <p class="text-[11px] text-gray-400 mt-1">在表格内 Ctrl+V 粘贴多行（列顺序：平台、id、qq、份数、自用或赞待，Tab 分隔）</p>`;
+
+            box.querySelectorAll('tr.wy-auth-sheet-row').forEach(rowEl => {
+                const idx = Number(rowEl.dataset.idx);
+                const r = wenyouAuthDraft[idx];
+                if (!r) return;
+                const platSel = rowEl.querySelector('.wy-auth-platform');
+                if (platSel && isWenyouReceived(r)) platSel.disabled = true;
+                const sync = () => {
+                    const cur = wenyouAuthDraft[idx];
+                    if (!cur || isWenyouReceived(cur)) return;
+                    cur.platform = rowEl.querySelector('.wy-auth-platform')?.value || '';
+                    cur.userId = rowEl.querySelector('.wy-auth-userid')?.value.trim() || '';
+                    cur.qq = rowEl.querySelector('.wy-auth-qq')?.value.trim() || '';
+                    cur.copies = Math.max(1, parseInt(rowEl.querySelector('.wy-auth-copies')?.value) || 1);
+                    cur.intent = normalizeWenyouIntent(rowEl.querySelector('.wy-auth-intent')?.value);
+                    cur.acquire = 'buy';
+                    cur.sponsored = false;
+                    updateWenyouCarAmountDisplay();
+                    updateWenyouAuthCountBadge();
+                    const stEl = document.getElementById('wenyouAuthModalStat');
+                    if (stEl) stEl.textContent = `共 ${wenyouAuthDraft.length} 人 · ${sumWenyouAuthCopies(wenyouAuthDraft)} 份`;
+                };
+                rowEl.querySelectorAll('input, select').forEach(inp => {
+                    inp.addEventListener('change', sync);
+                    inp.addEventListener('input', sync);
+                });
+            });
+            box.querySelectorAll('.wy-auth-remove').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = Number(btn.dataset.idx);
+                    wenyouAuthDraft.splice(idx, 1);
+                    renderWenyouAuthEditor();
+                    updateWenyouCarAmountDisplay();
+                });
+            });
+            box.querySelectorAll('.wy-draft-sponsor-info').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = Number(btn.dataset.idx);
+                    const a = wenyouAuthDraft[idx];
+                    if (a) openWenyouSponsorInfo(a);
+                });
+            });
+            updateWenyouCarAmountDisplay();
+            updateWenyouAuthCountBadge();
+        }
+
+        function openWenyouGiveModal(sellTypeId, fromAuthId, action) {
+            const st = sellTypes.find(t => String(t.id) === String(sellTypeId));
+            if (!st || !Array.isArray(st.authList)) return;
+            const from = st.authList.find(a => String(a.id) === String(fromAuthId));
+            if (!from) return;
+            if (isWenyouReceived(from)) {
+                showCustomAlert('「收的」名单不能再转给别人');
+                return;
+            }
+            if ((parseInt(from.copies) || 0) < 1) {
+                showCustomAlert('当前份数不足');
+                return;
+            }
+            const want = action === 'sponsor' ? 'sponsor' : 'transfer';
+            if (want === 'transfer' && !canWenyouTransfer(from)) {
+                showCustomAlert('只有「自用」才能转让；「赞待」请用赞助');
+                return;
+            }
+            if (want === 'sponsor' && !canWenyouSponsor(from)) {
+                showCustomAlert('只有「赞待」才能赞助；「自用」请用转让');
+                return;
+            }
+            wenyouTransferCtx = { sellTypeId, fromAuthId, action: want };
+            const title = document.getElementById('wenyouGiveTitle');
+            if (title) title.textContent = action === 'sponsor' ? '赞助给别人' : '转让给别人';
+            const info = document.getElementById('wenyouTransferInfo');
+            if (info) {
+                info.textContent = `从 ${from.platform || '-'} / ${from.userId || '-'} / QQ ${from.qq || '-'}（${from.copies || 1} 份）转出 1 份`;
+            }
+            ['wenyouGivePlatform', 'wenyouGiveUserId', 'wenyouGiveQq'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.getElementById('wenyouTransferModal')?.classList.remove('hidden');
+        }
+
+        function closeWenyouTransferModal() {
+            document.getElementById('wenyouTransferModal')?.classList.add('hidden');
+            wenyouTransferCtx = null;
+        }
+
+        async function confirmWenyouTransfer() {
+            if (!wenyouTransferCtx) return;
+            const st = sellTypes.find(t => String(t.id) === String(wenyouTransferCtx.sellTypeId));
+            if (!st || !Array.isArray(st.authList)) return;
+            const from = st.authList.find(a => String(a.id) === String(wenyouTransferCtx.fromAuthId));
+            if (!from) return;
+            if (isWenyouReceived(from)) { showCustomAlert('「收的」名单不能再转给别人'); return; }
+            const have = parseInt(from.copies) || 0;
+            if (have < 1) { showCustomAlert('当前份数不足'); return; }
+
+            const platform = document.getElementById('wenyouGivePlatform')?.value.trim() || '';
+            const userId = document.getElementById('wenyouGiveUserId')?.value.trim() || '';
+            const qq = document.getElementById('wenyouGiveQq')?.value.trim() || '';
+            if (!platform || !userId || !qq) { showCustomAlert('请填写对方平台、id、QQ'); return; }
+
+            const targetKey = wenyouAuthKey({ platform, userId, qq });
+            if (targetKey === wenyouAuthKey(from)) { showCustomAlert('不能转给自己'); return; }
+
+            let target = st.authList.find(a => wenyouAuthKey(a) === targetKey);
+            if (target && isWenyouReceived(target)) {
+                showCustomAlert('重复：此人已是被赞待/被转让（收的）');
+                return;
+            }
+
+            const action = wenyouTransferCtx.action === 'sponsor' ? 'sponsor' : 'transfer';
+            if (action === 'transfer' && !canWenyouTransfer(from)) {
+                showCustomAlert('只有「自用」才能转让');
+                return;
+            }
+            if (action === 'sponsor' && !canWenyouSponsor(from)) {
+                showCustomAlert('只有「赞待」才能赞助');
+                return;
+            }
+            const sponsorSnap = action === 'sponsor'
+                ? { platform: from.platform || '', userId: from.userId || '', qq: from.qq || '' }
+                : null;
+            if (target) {
+                target.copies = (parseInt(target.copies) || 0) + 1;
+                if (action === 'sponsor') {
+                    target.acquire = 'sponsor';
+                    target.sponsored = true;
+                    target.sponsoredBy = sponsorSnap;
+                } else if (!isWenyouReceived(target)) {
+                    // 转给已在名单里「自己买的」人：份数叠加，仍算自己买的
+                } else {
+                    target.acquire = 'transfer';
+                }
+            } else {
+                const neu = normalizeWenyouAuthEntry({
+                    id: Date.now() + Math.random(),
+                    platform, userId, qq,
+                    copies: 1,
+                    acquire: action,
+                    intent: 'self'
+                });
+                if (action === 'sponsor') neu.sponsoredBy = sponsorSnap;
+                st.authList.push(neu);
+            }
+
+            from.copies = have - 1;
+            if (from.copies <= 0) {
+                st.authList = st.authList.filter(a => String(a.id) !== String(from.id));
+            }
+
+            if (st.wenyou) {
+                const total = sumWenyouAuthCopies(st.authList);
+                st.carAmount = moneyNum(st.price) * total;
+                const stock = calcWenyouStock(st);
+                if (stock.enableInventory && total > stock.base) {
+                    showCustomAlert('转让后名单份数将超过总额，无法完成');
+                    return;
+                }
+                st.enableInventory = stock.enableInventory;
+                st.quantity = stock.quantity;
+            }
+
+            st.updatedAt = Date.now();
+            await put('sellTypes', st);
+            closeWenyouTransferModal();
+            await refreshAll();
+            const latest = sellTypes.find(t => String(t.id) === String(st.id));
+            if (latest) showSellTypeDetail(latest);
+            const authModal = document.getElementById('wenyouAuthModal');
+            if (authModal && !authModal.classList.contains('hidden') && wenyouAuthModalCtx.mode === 'view') {
+                wenyouAuthModalCtx.sellTypeId = latest ? latest.id : wenyouAuthModalCtx.sellTypeId;
+                renderWenyouAuthEditor();
+            }
+            showToast(action === 'sponsor' ? '已赞助给对方 1 份' : '已转让给对方 1 份');
+        }
+
+        window.openWenyouGiveModal = openWenyouGiveModal;
+        window.openWenyouTransferModal = (sellTypeId, authId) => openWenyouGiveModal(sellTypeId, authId, 'transfer');
+        window.markWenyouAuthSponsored = (sellTypeId, authId) => openWenyouGiveModal(sellTypeId, authId, 'sponsor');
+
+
         function openSellTypeModal(st = null) {
             currentSellTypeEditId = st?.id || null;
             document.getElementById('sellTypeModalTitle').innerText = st ? '编辑售卖类型' : '新增售卖类型';
@@ -11064,6 +12377,39 @@
             document.getElementById('sellTypePrice').value = st?.price || '';
             document.getElementById('sellTypeQuantity').value = st?.quantity ?? 0;
             document.getElementById('sellTypeRemark').value = st?.remark || '';
+
+            // 文游字段：编辑跟条目；新建跟总开关
+            const useWy = st ? !!st.wenyou : !!sellWenyouMode;
+            applySellTypeFormMode(useWy);
+            if (useWy) {
+                const cat = (st?.wenyouCategory && WENYOU_CATEGORY_PRESETS.includes(st.wenyouCategory))
+                    ? st.wenyouCategory : '';
+                fillWenyouCategoryOptions(cat);
+                const carEl = document.getElementById('wenyouCarName');
+                if (carEl) {
+                    carEl.value = st?.carName || (st?.wenyou ? (st?.level3 || st?.name || '') : '') || '';
+                }
+                const kindEl = document.getElementById('wenyouKindSelect');
+                if (kindEl) {
+                    kindEl.value = normalizeWenyouKind(st?.wenyouKind || st?.level2 || '限时');
+                }
+                const untilEl = document.getElementById('wenyouLimitedUntil');
+                if (untilEl) untilEl.value = st?.limitedUntil || '';
+                const quotaEl = document.getElementById('wenyouQuota');
+                if (quotaEl) quotaEl.value = st?.quota != null ? st.quota : (st?.quantity || 1);
+                const remainEl = document.getElementById('wenyouRemain');
+                if (remainEl) remainEl.value = st?.remain != null ? st.remain : (st?.quantity || 0);
+                syncWenyouKindFields();
+                wenyouAuthDraft = Array.isArray(st?.authList)
+                    ? st.authList.map(a => ({ ...a }))
+                    : [];
+                updateWenyouAuthCountBadge();
+                updateWenyouCarAmountDisplay(wenyouAuthDraft);
+            } else {
+                wenyouAuthDraft = [];
+                updateWenyouAuthCountBadge();
+                updateWenyouCarAmountDisplay([]);
+            }
 
             // 库存管理开关
             const enableInventory = st?.enableInventory ?? false;
@@ -11239,22 +12585,10 @@
         // 保存售卖类型 —— 独立函数
         async function saveSellType() {
             try {
-                const level1 = document.getElementById('sellTypeLevel1').value.trim();
-                if (!level1) { showCustomAlert('请输入一级分类'); return; }
-                const level2 = document.getElementById('sellTypeLevel2').value.trim();
-                const level3 = document.getElementById('sellTypeLevel3').value.trim();
-                if (!level3) { showCustomAlert('请输入三级名称'); return; }
                 const price = parseFloat(document.getElementById('sellTypePrice').value) || 0;
                 if (price <= 0) { showCustomAlert('请输入有效单价'); return; }
 
-                const enableInventory = document.getElementById('sellTypeEnableInventory')?.checked || false;
-                let quantity = parseInt(document.getElementById('sellTypeQuantity').value) || 0;
-                if (enableInventory && quantity < 0) quantity = 0;
-
-                const remark = document.getElementById('sellTypeRemark').value.trim();
-                const tags = Array.from(document.querySelectorAll('#sellTypeTagCheckboxes .sell-tag-checkbox:checked')).map(cb => cb.value);
-
-                // 处理图片
+                // 处理图片（两种模式共用）
                 let imageIds = currentSellTypeEditId ? (sellTypes.find(st => st.id === currentSellTypeEditId)?.imageIds || []) : [];
                 if (window.pendingSellTypeDeleteIds && window.pendingSellTypeDeleteIds.length) {
                     imageIds = imageIds.filter(id => !window.pendingSellTypeDeleteIds.includes(id));
@@ -11269,21 +12603,87 @@
                     sellTypePendingImages = [];
                 }
 
-                const data = {
-                    level1,
-                    level2,
-                    level3,
-                    name: level3,
-                    price,
-                    quantity,
-                    enableInventory,
-                    tags,
-                    remark,
-                    imageIds
-                };
+                let data;
+                if (window._sellTypeFormWy) {
+                    await ensureWenyouAutoTags();
+                    const carName = document.getElementById('wenyouCarName')?.value.trim() || '';
+                    if (!carName) { showCustomAlert('请填写车名'); return; }
+                    const category = document.getElementById('wenyouCategorySelect')?.value.trim() || '';
+                    if (!category || !WENYOU_CATEGORY_PRESETS.includes(category)) {
+                        showCustomAlert('请选择类型');
+                        return;
+                    }
+                    const wenyouKind = normalizeWenyouKind(document.getElementById('wenyouKindSelect')?.value || '限时');
+                    if (!wenyouKind) { showCustomAlert('请选择限售方式'); return; }
+                    const limitedUntil = document.getElementById('wenyouLimitedUntil')?.value || '';
+                    const quota = Math.max(0, parseInt(document.getElementById('wenyouQuota')?.value) || 0);
+                    const remain = Math.max(0, parseInt(document.getElementById('wenyouRemain')?.value) || 0);
+                    if (wenyouKind === '限时' && !limitedUntil) { showCustomAlert('请填写限时时间'); return; }
+                    if (wenyouKind === '限量' && quota < 1) { showCustomAlert('请填写份数'); return; }
+                    if (wenyouKind === '限量转限时' && remain < 0) { showCustomAlert('请填写余量份数'); return; }
+                    const authList = collectWenyouAuthFromEditor().map(a => normalizeWenyouAuthEntry(a));
+                    // 文游不写普通标签，类型只用预设字段
+                    const tags = [];
+                    const authCopies = sumWenyouAuthCopies(authList);
+                    const carAmount = moneyNum(price) * authCopies;
+                    const stockInfo = calcWenyouStock({
+                        wenyouKind, quota, remain, authList
+                    });
+                    if (stockInfo.enableInventory && authCopies > stockInfo.base) {
+                        showCustomAlert('授权名单总份数不能超过' + (wenyouKind === '限量' ? '份数' : '余量份数') + '（' + stockInfo.base + '）');
+                        return;
+                    }
+                    data = {
+                        wenyou: true,
+                        wenyouKind,
+                        wenyouCategory: category,
+                        carName,
+                        limitedUntil: wenyouKind === '限时' ? limitedUntil : '',
+                        quota: wenyouKind === '限量' ? quota : 0,
+                        remain: wenyouKind === '限量转限时' ? remain : 0,
+                        // 一级固定「文游美工」，避免每个类型/车名各占一个文件夹
+                        level1: '文游美工',
+                        level2: wenyouKind,
+                        level3: carName,
+                        name: carName,
+                        price,
+                        quantity: stockInfo.quantity,
+                        enableInventory: stockInfo.enableInventory,
+                        tags,
+                        remark: '',
+                        authList,
+                        carAmount,
+                        imageIds
+                    };
+                } else {
+                    const level1 = document.getElementById('sellTypeLevel1').value.trim();
+                    if (!level1) { showCustomAlert('请输入一级分类'); return; }
+                    const level2 = document.getElementById('sellTypeLevel2').value.trim();
+                    const level3 = document.getElementById('sellTypeLevel3').value.trim();
+                    if (!level3) { showCustomAlert('请输入三级名称'); return; }
+                    const enableInventory = document.getElementById('sellTypeEnableInventory')?.checked || false;
+                    let quantity = parseInt(document.getElementById('sellTypeQuantity').value) || 0;
+                    if (enableInventory && quantity < 0) quantity = 0;
+                    const remark = document.getElementById('sellTypeRemark').value.trim();
+                    const tags = Array.from(document.querySelectorAll('#sellTypeTagCheckboxes .sell-tag-checkbox:checked')).map(cb => cb.value);
+                    data = {
+                        wenyou: false,
+                        level1,
+                        level2,
+                        level3,
+                        name: level3,
+                        price,
+                        quantity,
+                        enableInventory,
+                        tags,
+                        remark,
+                        authList: [],
+                        imageIds
+                    };
+                }
                 if (currentSellTypeEditId) data.id = currentSellTypeEditId;
                 await put('sellTypes', data);
-                showCustomAlert('售卖类型保存成功');
+                showToast('售卖类型已保存');
                 closeSellTypeModal();
                 await refreshAll();
             } catch (err) {
@@ -11394,11 +12794,9 @@
                         (s.requirements && s.requirements.toLowerCase().includes(keyword));
                 });
             }
-            if (currentOrderFilter === 'active') filtered = filtered.filter(s => !s.completed && new Date(s.deadline) >=
-                new Date());
-            else if (currentOrderFilter === 'completed') filtered = filtered.filter(s => s.completed);
-            else if (currentOrderFilter === 'overdue') filtered = filtered.filter(s => !s.completed && new Date(s
-                .deadline) < new Date());
+if (currentOrderFilter === 'active') filtered = filtered.filter(s => isOrderWaiting(s) && new Date(s.deadline) >= new Date());
+            else if (currentOrderFilter === 'completed') filtered = filtered.filter(s => !isOrderWaiting(s));
+            else if (currentOrderFilter === 'overdue') filtered = filtered.filter(s => isOrderWaiting(s) && new Date(s.deadline) < new Date());
             if (currentOrderSort === 'deadline_asc') filtered.sort((a, b) => new Date(a.deadline) - new Date(b
                 .deadline));
             else if (currentOrderSort === 'deadline_desc') filtered.sort((a, b) => new Date(b.deadline) - new Date(a
@@ -11754,6 +13152,15 @@
             const container = document.getElementById('scheduleList');
             if (!container) return;
 
+            if (currentScheduleView === 'lobby') {
+                renderKitchenLobby(container);
+                return;
+            }
+            if (currentScheduleView === 'kitchen') {
+                renderKitchenBoard(container);
+                return;
+            }
+
             let filtered = getFilteredSchedules();
             const totalPages = Math.ceil(filtered.length / itemsPerSchedulePage);
             if (currentSchedulePage > totalPages) currentSchedulePage = totalPages || 1;
@@ -11785,9 +13192,9 @@
 
                     // 状态徽章（放在名称后面，和素材的分类标签位置一样）
                     let statusBadge = '';
-                    if (!waitingOrder) statusBadge = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full ml-2">已完成</span>';
-                    else if (isOverdue) statusBadge = '<span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full ml-2">逾期</span>';
-                    else statusBadge = `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full ml-2">进行中 · 剩${countRemainingItems(s)}</span>`;
+                    if (!waitingOrder) statusBadge = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full ml-2">已出餐</span>';
+                    else if (isOverdue) statusBadge = '<span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full ml-2">超时</span>';
+                    else statusBadge = `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full ml-2">制作中 · 剩${countRemainingItems(s)}</span>`;
 
                     // 图片缩略图（右侧，和素材一样最多3张）
                     let imagesHtml = '';
@@ -11852,9 +13259,9 @@
 
                     // 状态标签（放在卡片图片右上角，和素材网格一样）
                     let statusBadge = '';
-                    if (!waitingOrder) statusBadge = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">已完成</span>';
-                    else if (isOverdue) statusBadge = '<span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">逾期</span>';
-                    else statusBadge = `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">剩${countRemainingItems(s)}</span>`;
+                    if (!waitingOrder) statusBadge = '<span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">已出餐</span>';
+                    else if (isOverdue) statusBadge = '<span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">超时</span>';
+                    else statusBadge = `<span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">制作中 · 剩${countRemainingItems(s)}</span>`;
 
                     // 首图（和素材网格一样，显示第一张图片）
                     let imageUrl = null;
@@ -11959,9 +13366,19 @@
             document.getElementById('scheduleRequirements').value = schedule?.requirements || '';
             document.getElementById('scheduleDeposit').value = schedule?.deposit || '';
             document.getElementById('scheduleFinalAmount').value = schedule?.finalAmount || '';
+            const depPaid = document.getElementById('scheduleDepositPaid');
+            const finPaid = document.getElementById('scheduleFinalPaid');
+            if (depPaid) depPaid.checked = !!(schedule?.depositPaid);
+            if (finPaid) finPaid.checked = !!(schedule?.finalPaid);
             document.getElementById('scheduleStartTime').value = schedule?.startTime || '';
             document.getElementById('scheduleDeadline').value = schedule?.deadline || '';
             document.getElementById('scheduleColor').value = schedule?.color || '#e09d8e';
+            if (!schedule && orderBatchMode?.platform) {
+                document.getElementById('schedulePlatform').value = orderBatchMode.platform;
+                document.getElementById('scheduleModalTitle').innerText = '连续开单 · ' + (orderBatchMode.platform || '');
+            }
+            const saveBtn = document.getElementById('saveScheduleBtn');
+            if (saveBtn) saveBtn.textContent = (!schedule && orderBatchMode) ? '保存并继续' : '保存';
 
             // 不再有全局锁定逻辑，一切由各行自己的 deleted 标记控制
 
@@ -12091,6 +13508,8 @@
             const requirements = document.getElementById('scheduleRequirements').value;
             const deposit = parseFloat(document.getElementById('scheduleDeposit').value) || 0;
             const finalAmount = parseFloat(document.getElementById('scheduleFinalAmount').value) || 0;
+            const depositPaid = !!document.getElementById('scheduleDepositPaid')?.checked;
+            const finalPaid = !!document.getElementById('scheduleFinalPaid')?.checked;
             const startTime = document.getElementById('scheduleStartTime').value || null;
             const deadline = document.getElementById('scheduleDeadline').value;
             if (!deadline) { showCustomAlert('请设置截止时间'); return; }
@@ -12198,6 +13617,8 @@
                 requirements,
                 deposit,
                 finalAmount,
+                depositPaid,
+                finalPaid,
                 startTime,
                 deadline,
                 color,
@@ -12214,6 +13635,12 @@
                     // 编辑时保留创建时间与完成状态，避免改单时打乱排队与存档
                     if (existing.createdAt) scheduleData.createdAt = existing.createdAt;
                     scheduleData.completed = !!existing.completed;
+                    if (existing.depositPaid != null && depositPaid === false && !document.getElementById('scheduleDepositPaid')) {
+                        scheduleData.depositPaid = !!existing.depositPaid;
+                    }
+                    if (existing.finalPaid != null && finalPaid === false && !document.getElementById('scheduleFinalPaid')) {
+                        scheduleData.finalPaid = !!existing.finalPaid;
+                    }
                 }
                 scheduleData.id = currentScheduleEditId;
             } else {
@@ -12221,9 +13648,19 @@
             }
 
             await put('schedules', scheduleData);
+            const wasNew = !currentScheduleEditId;
+            const savedPlatform = platform;
             closeScheduleModal();
             await refreshAll();
-            showToast('订单已保存');
+            if (wasNew && orderBatchMode) {
+                orderBatchMode.count = (orderBatchMode.count || 0) + 1;
+                if (!orderBatchMode.platform && savedPlatform) orderBatchMode.platform = savedPlatform;
+                updateOrderBatchModeBar();
+                showToast(`已开单，可继续（已开 ${orderBatchMode.count} 单）`);
+                setTimeout(() => openScheduleModal(null), 120);
+            } else {
+                showToast('订单已保存');
+            }
         }
 
         async function toggleComplete(scheduleId) {
@@ -12260,6 +13697,11 @@
             if (window._currentDetailSchedule && String(window._currentDetailSchedule.id) === String(scheduleId)) {
                 window._currentDetailSchedule = schedule;
                 showScheduleDetail(schedule);
+            }
+            if (currentReceiptSchedule && String(currentReceiptSchedule.id) === String(scheduleId)) {
+                currentReceiptSchedule = schedule;
+                const paper = document.getElementById('orderReceiptPaper');
+                if (paper) paper.innerHTML = buildOrderReceiptHtml(schedule);
             }
             if (typeof showToast === 'function') {
                 showToast(item.completed ? '已划掉 1 个项目' : '已撤销该项目');
@@ -12480,6 +13922,205 @@
             schedule.completed = !!done;
         }
 
+
+
+        function renderKitchenLobby(container) {
+            const waiting = (currentSchedules || [])
+                .filter(s => isOrderWaiting(s))
+                .sort((a, b) => {
+                    const ca = Number(a.createdAt) || 0;
+                    const cb = Number(b.createdAt) || 0;
+                    if (ca !== cb) return ca - cb;
+                    return (Number(a.id) || 0) - (Number(b.id) || 0);
+                });
+            const pag = document.getElementById('schedulePagination');
+            if (pag) pag.innerHTML = '';
+            if (!waiting.length) {
+                container.innerHTML = '<div class="text-center py-10 opacity-70">大厅空闲 · 暂无制作中订单</div>';
+                updateBatchScheduleUI();
+                return;
+            }
+            let html = '<div class="kitchen-lobby-grid">';
+            waiting.forEach((s, i) => {
+                const q = getOrderQueueInfo(s);
+                const ahead = q.ahead;
+                const dl = s.deadline ? new Date(s.deadline).toLocaleString() : '-';
+                const pulse = i === 0 ? ' pulse' : '';
+                html += `<div class="kitchen-ticket order-detail-trigger" data-id="${s.id}">
+                    <div class="text-[10px] tracking-[0.25em] text-gray-500 mb-1">叫号</div>
+                    <div class="kitchen-queue-no${pulse}">${formatQueueNo(q.queueNo)}</div>
+                    <div class="text-sm font-bold mt-2 truncate">${escapeHtml(s.orderType || '订单')}</div>
+                    <div class="text-xs text-gray-500 mt-1">前方还有 <strong>${ahead}</strong> 个未完成项目</div>
+                    <div class="text-xs text-gray-400 mt-1 truncate">${escapeHtml(s.platform || '无平台')} · ${dl}</div>
+                    <div class="text-xs mt-2">剩 ${countRemainingItems(s)} 项</div>
+                </div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+            updateBatchScheduleUI();
+        }
+
+        function renderKitchenBoard(container) {
+            const tickets = [];
+            (currentSchedules || []).filter(s => isOrderWaiting(s)).forEach(s => {
+                const items = Array.isArray(s.items) ? s.items : [];
+                if (!items.length) {
+                    tickets.push({ schedule: s, index: -1, name: s.orderType || '整单', meta: s.platform || '' });
+                    return;
+                }
+                items.forEach((it, index) => {
+                    if (it.deleted || isItemCompleted(it, s)) return;
+                    tickets.push({
+                        schedule: s,
+                        index,
+                        name: it.name || '未命名',
+                        meta: `${s.orderType || ''} · ${s.platform || ''}`.trim()
+                    });
+                });
+            });
+            tickets.sort((a, b) => {
+                const ca = Number(a.schedule.createdAt) || 0;
+                const cb = Number(b.schedule.createdAt) || 0;
+                if (ca !== cb) return ca - cb;
+                return a.index - b.index;
+            });
+            const pag = document.getElementById('schedulePagination');
+            if (pag) pag.innerHTML = '';
+            if (!tickets.length) {
+                container.innerHTML = '<div class="text-center py-10 opacity-70">出餐口空闲 · 没有待做项目</div>';
+                updateBatchScheduleUI();
+                return;
+            }
+            let html = '<div class="kitchen-board-grid">';
+            tickets.forEach(t => {
+                const q = getOrderQueueInfo(t.schedule);
+                const sid = t.schedule.id;
+                html += `<div class="kitchen-pass-card" data-sid="${sid}" data-index="${t.index}">
+                    <div class="pass-meta">#${formatQueueNo(q.queueNo)} · ${escapeHtml(t.meta || '')}</div>
+                    <div class="pass-item">${escapeHtml(t.name)}</div>
+                    <div class="pass-meta truncate">${escapeHtml(t.schedule.requirements || '')}</div>
+                    <button type="button" class="kitchen-pass-done kitchenPassDoneBtn" data-id="${sid}" data-index="${t.index}">
+                        <i class="fas fa-check"></i> 划掉出餐
+                    </button>
+                </div>`;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+            container.querySelectorAll('.kitchenPassDoneBtn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const card = btn.closest('.kitchen-pass-card');
+                    if (card) card.classList.add('is-fading');
+                    const id = btn.dataset.id;
+                    const index = Number(btn.dataset.index);
+                    if (index < 0) await toggleComplete(id);
+                    else await toggleOrderItemComplete(id, index);
+                });
+            });
+            updateBatchScheduleUI();
+        }
+
+        function updateOrderBatchModeBar() {
+            const bar = document.getElementById('orderBatchModeBar');
+            if (!bar) return;
+            if (!orderBatchMode) {
+                bar.classList.remove('show');
+                return;
+            }
+            bar.classList.add('show');
+            const p = document.getElementById('orderBatchPlatformLabel');
+            const c = document.getElementById('orderBatchCount');
+            if (p) p.textContent = orderBatchMode.platform || '（开单时填写）';
+            if (c) c.textContent = String(orderBatchMode.count || 0);
+        }
+
+        function startOrderBatchMode() {
+            const pref = (() => {
+                try { return JSON.parse(localStorage.getItem('orderBatchPrefs') || '{}'); } catch (e) { return {}; }
+            })();
+            const platform = window.prompt('连续开单：锁定平台名称（可留空，首次保存时记住）', pref.platform || '') ?? '';
+            orderBatchMode = { platform: (platform || '').trim(), count: 0 };
+            try { localStorage.setItem('orderBatchPrefs', JSON.stringify({ platform: orderBatchMode.platform })); } catch (e) {}
+            updateOrderBatchModeBar();
+            showToast('已进入连续开单');
+            openScheduleModal(null);
+        }
+
+        function exitOrderBatchMode() {
+            orderBatchMode = null;
+            updateOrderBatchModeBar();
+            showToast('已退出连续开单');
+        }
+
+        function buildPickupSlipHtml(schedule) {
+            const info = getReceiptShopInfo();
+            const shopName = info.name || '我的店铺';
+            const queue = getOrderQueueInfo(schedule);
+            const deadlineStr = schedule.deadline ? new Date(schedule.deadline).toLocaleString() : '-';
+            const note = schedule.requirements
+                ? `<div class="receipt-note-block" style="text-align:left;margin-top:12px;"><div class="receipt-note-label">备 注</div><div class="receipt-note-body">${escapeHtml(schedule.requirements)}</div></div>`
+                : '';
+            return `
+                <div class="pickup-slip-title">交 稿 取 件</div>
+                <div class="receipt-shop-name" style="font-size:18px;">${escapeHtml(shopName)}</div>
+                <div class="pickup-slip-no">${formatQueueNo(queue.queueNo)}</div>
+                <div style="font-size:14px;font-weight:700;margin:8px 0;">${escapeHtml(schedule.orderType || '订单')}</div>
+                <hr class="receipt-dash">
+                <div class="receipt-meta" style="text-align:left;">
+                    <div class="row"><span>平台</span><span>${escapeHtml(schedule.platform || '-')}</span></div>
+                    <div class="row"><span>截止</span><span>${deadlineStr}</span></div>
+                    <div class="row"><span>状态</span><span>${isOrderWaiting(schedule) ? '制作中' : '可取件'}</span></div>
+                </div>
+                ${note}
+                <div class="receipt-thanks" style="margin-top:16px;">请凭此条取件</div>
+            `;
+        }
+
+        function showPickupSlip(schedule) {
+            if (!schedule) return;
+            currentPickupSchedule = schedule;
+            const paper = document.getElementById('pickupSlipPaper');
+            if (paper) paper.innerHTML = buildPickupSlipHtml(schedule);
+            document.getElementById('pickupSlipModal')?.classList.remove('hidden');
+        }
+
+        function closePickupSlipModal() {
+            document.getElementById('pickupSlipModal')?.classList.add('hidden');
+        }
+
+        async function exportPickupSlipImage() {
+            const paper = document.getElementById('pickupSlipPaper');
+            if (!paper || typeof html2canvas !== 'function') {
+                showCustomAlert('导出组件未就绪，请刷新后重试');
+                return;
+            }
+            try {
+                const canvas = await html2canvas(paper, { scale: 2, backgroundColor: '#fffdf8', logging: false });
+                const link = document.createElement('a');
+                link.download = `取件条_${currentPickupSchedule?.orderType || Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (e) {
+                console.error(e);
+                showCustomAlert('导出失败，请重试');
+            }
+        }
+
+        async function toggleSchedulePayFlag(scheduleId, field) {
+            const schedule = currentSchedules.find(s => String(s.id) === String(scheduleId));
+            if (!schedule) return;
+            schedule[field] = !schedule[field];
+            schedule.updatedAt = Date.now();
+            await put('schedules', schedule);
+            await refreshAll();
+            if (window._currentDetailSchedule && String(window._currentDetailSchedule.id) === String(scheduleId)) {
+                showScheduleDetail(schedule);
+            }
+            showToast(field === 'depositPaid'
+                ? (schedule.depositPaid ? '定金已盖章' : '已撤销定金章')
+                : (schedule.finalPaid ? '尾款已盖章' : '已撤销尾款章'));
+        }
+
         /** 叫号按仍有未完成项目的订单排队；前方等待按剩余项目数合计 */
         function getOrderQueueInfo(schedule) {
             const createdAt = Number(schedule.createdAt) || Date.now();
@@ -12539,18 +14180,27 @@
             const items = (schedule.items || []).filter(it => !it.deleted);
             let itemsHtml = '';
             let itemsSum = 0;
+            const canToggle = schedule && schedule.id != null && String(schedule.id) !== '预览'
+                && Array.isArray(schedule.items);
             if (items.length) {
-                items.forEach(it => {
+                (schedule.items || []).forEach((it, index) => {
+                    if (it.deleted) return;
                     const qty = Number(it.qty) || 1;
                     const price = Number(it.price) || 0;
                     const sub = qty * price * (1 - (Number(it.discount) || 0) / 100);
                     itemsSum += sub;
-                    const doneCls = isItemCompleted(it, schedule) ? ' is-done' : '';
-                    const doneTag = isItemCompleted(it, schedule) ? ' · 已完成' : '';
-                    itemsHtml += `<div class="receipt-item${doneCls}">
+                    const done = isItemCompleted(it, schedule);
+                    const doneCls = done ? ' is-done' : '';
+                    const doneTag = done ? ' · 已完成' : '';
+                    const tip = canToggle ? (done ? '点击撤销' : '点击划掉') : '';
+                    const toggleCls = canToggle ? ' receipt-item-toggle' : '';
+                    const toggleAttrs = canToggle
+                        ? ` data-id="${escapeHtml(String(schedule.id))}" data-index="${index}" data-tip="${tip}" role="button" tabindex="0"`
+                        : '';
+                    itemsHtml += `<div class="receipt-item${toggleCls}${doneCls}"${toggleAttrs}>
                         <div class="receipt-item-name">${escapeHtml(it.name || '未命名')}</div>
-                        <div class="receipt-item-amt">¥${sub.toFixed(2)}</div>
-                        <div class="receipt-item-sub">${qty} × ¥${price.toFixed(2)}${it.discount ? ' · 折扣' + it.discount + '%' : ''}${doneTag}</div>
+                        <div class="receipt-item-amt">¥${moneyFmt(sub)}</div>
+                        <div class="receipt-item-sub">${qty} × ¥${moneyFmt(price)}${it.discount ? ' · 折扣' + it.discount + '%' : ''}${doneTag}</div>
                     </div>`;
                 });
             } else {
@@ -12585,10 +14235,10 @@
                 <div class="receipt-items">${itemsHtml}${servicesHtml}</div>
                 <hr class="receipt-dash">
                 <div class="receipt-totals">
-                    <div class="row"><span>项目合计</span><span>¥${itemsSum.toFixed(2)}</span></div>
-                    <div class="row"><span>定金</span><span>¥${(Number(schedule.deposit) || 0).toFixed(2)}</span></div>
-                    <div class="row"><span>尾款</span><span>¥${(Number(schedule.finalAmount) || 0).toFixed(2)}</span></div>
-                    <div class="row grand"><span>应付总额</span><span>¥${total.toFixed(2)}</span></div>
+                    <div class="row"><span>项目合计</span><span>¥${moneyFmt(itemsSum)}</span></div>
+                    <div class="row"><span>定金</span><span>¥${moneyFmt(schedule.deposit)}</span></div>
+                    <div class="row"><span>尾款</span><span>¥${moneyFmt(schedule.finalAmount)}</span></div>
+                    <div class="row grand"><span>应付总额</span><span>¥${moneyFmt(total)}</span></div>
                 </div>
                 ${schedule.requirements ? '<hr class="receipt-dash"><div class="receipt-note-block"><div class="receipt-note-label">备 注</div><div class="receipt-note-body">' + escapeHtml(schedule.requirements) + '</div></div>' : ''}
                 <div class="receipt-thanks">★ THANK YOU ★</div>
@@ -12615,6 +14265,8 @@
                 requirements: document.getElementById('scheduleRequirements')?.value.trim() || '',
                 deposit: parseFloat(document.getElementById('scheduleDeposit')?.value) || 0,
                 finalAmount: parseFloat(document.getElementById('scheduleFinalAmount')?.value) || 0,
+                depositPaid: !!document.getElementById('scheduleDepositPaid')?.checked,
+                finalPaid: !!document.getElementById('scheduleFinalPaid')?.checked,
                 deadline: document.getElementById('scheduleDeadline')?.value || '',
                 startTime: document.getElementById('scheduleStartTime')?.value || '',
                 createdAt: Date.now(),
@@ -12636,6 +14288,23 @@
             const paper = document.getElementById('orderReceiptPaper');
             if (paper) paper.innerHTML = buildOrderReceiptHtml(schedule);
             document.getElementById('orderReceiptModal')?.classList.remove('hidden');
+            bindReceiptItemToggleOnce();
+        }
+
+        function bindReceiptItemToggleOnce() {
+            const paper = document.getElementById('orderReceiptPaper');
+            if (!paper || paper.dataset.toggleBound === '1') return;
+            paper.dataset.toggleBound = '1';
+            paper.addEventListener('click', (e) => {
+                const row = e.target.closest('.receipt-item-toggle');
+                if (!row) return;
+                e.preventDefault();
+                e.stopPropagation();
+                const id = row.dataset.id;
+                const index = row.dataset.index;
+                if (id == null || index == null || String(id) === '预览') return;
+                toggleOrderItemComplete(id, index);
+            });
         }
 
         function closeOrderReceiptModal() {
@@ -12742,8 +14411,8 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
                 <div><div class="label">状态</div><div class="value">${!isOrderWaiting(schedule) ? '✅ 已完成' : `⏳ 进行中（剩 ${countRemainingItems(schedule)} 项）`}</div></div>
                 <div><div class="label">开始时间</div><div class="value">${startStr}</div></div>
                 <div><div class="label">截止时间</div><div class="value">${deadlineStr}</div></div>
-                <div><div class="label">定金</div><div class="value">¥${schedule.deposit || 0}</div></div>
-                <div><div class="label">尾款</div><div class="value">¥${schedule.finalAmount || 0}</div></div>
+                <div><div class="label">定金</div><div class="value">¥${schedule.deposit || 0}${schedule.depositPaid ? ' · 已收' : ''}</div></div>
+                <div><div class="label">尾款</div><div class="value">¥${schedule.finalAmount || 0}${schedule.finalPaid ? ' · 已收' : ''}</div></div>
             </div>
             <div class="divider"></div>
             <div><div class="label">要求</div><div class="value">${escapeHtml(schedule.requirements) || '无'}</div></div>
@@ -12871,82 +14540,57 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
         // 以后新公告往数组最前面加一条即可
         const CHANGELOG_ENTRIES = [
             {
-                date: '2026-08-14（第二次）',
-                title: '订单小票 / 客户菜单 / 项目逐项完成',
-                sections: [
-                    {
-                        heading: '订单小票',
-                        items: [
-                            '新建/详情/列表可出餐厅风小票，支持导出图片给客户',
-                            '叫号排队：按未完成订单排队，并显示前方还有几个「未完成项目」',
-                            '小票不展示内部单号；长备注改为独立提醒区块，更易读'
-                        ]
-                    },
-                    {
-                        heading: '项目模板与客户菜单',
-                        items: [
-                            '可预设常用项目名称和单价，开单时一键选用',
-                            '饭店风「客户菜单」：价目表样式，可导出图片发给客户',
-                            '店铺名、小票副标题、底部说明、菜单标题、小提醒统一放在「项目模板」里设置（小票自动引用）'
-                        ]
-                    },
-                    {
-                        heading: '订单进度',
-                        items: [
-                            '一个订单里可逐项划掉完成，小票上对应项目显示删除线',
-                            '列表也可点项目胶囊单独完成；「全部完成」仍可一次做完整单',
-                            '编辑保存时保留创建时间与完成进度，避免改单打乱排队'
-                        ]
-                    },
-                    {
-                        heading: '外观',
-                        items: [
-                            '设置里可切换多套莫兰迪主题色',
-                            '整体排版与字体层级微调，界面更清晰'
-                        ]
-                    }
-                ]
-            },
-            {
                 date: '2026-08-14',
-                title: '店铺标签 / 同店导入 / 图片与备份',
+                title: '订单厨房流 · 文游美工 · 账单修正',
                 sections: [
                     {
-                        heading: '店铺与标签',
+                        heading: '订单',
                         items: [
-                            '店铺可绑定大/小标签；选店后素材会自动带上对应标签',
-                            '以前建好的标签也能正确勾选、绑定，并同步到该店已有素材',
-                            '点店铺名/标签名可跳转查看其下全部素材，并显示数量'
+                            '后厨台面；筛选：制作中 / 已出餐 / 超时',
+                            '列表 / 网格为主；「大厅」「出餐」收在工作台菜单；这两视图下隐藏筛选与搜索',
+                            '叫号大厅、出餐看板（待做一键划掉）',
+                            '餐厅风小票可导出；小票上可点项目划掉/撤销，与列表同步',
+                            '交稿取件条可导出；支持连续开单（Ctrl+S）',
+                            '订单可按项目逐个完成，列表显示进度'
                         ]
                     },
                     {
-                        heading: '同店导入',
+                        heading: '售卖类型 · 文游美工',
                         items: [
-                            '新增「同店导入」连续新建模式：选店后用正常表单一直录（可传图）',
-                            '可选「同店同一个固有分类」，每次自动勾选并锁定分类',
-                            '保存后轻提示、记住上次店铺与分类；支持 Ctrl+S 保存并继续'
+                            '开关「文游美工」后用专属表单（不影响普通售卖）',
+                            '车名、类型预设、限售方式；列表归在「文游美工」下，不按类型拆文件夹',
+                            '库存 = 份数−名单；为 0 显示售罄；平台限四选一',
+                            '授权名单改为在线表格，可搜索、可从 Excel 粘贴',
+                            '用途分自用/赞待：自用可转让，赞待可赞助；被赞待可点开看赞助人'
                         ]
                     },
                     {
-                        heading: '图片',
+                        heading: '项目模板',
                         items: [
-                            '素材及账单/订单等附件支持 JPG / PNG',
-                            '支持放大预览：滚轮缩放、拖动查看、下载',
-                            '素材列表缩略图可直接点开放大'
+                            '预设项目与单价，开单一键选用；支持套餐多行上桌',
+                            '客户菜单可导出，分项目 / 套餐 / 加价；店名与小提醒在此统一设置'
                         ]
                     },
                     {
-                        heading: '备份导入',
+                        heading: '素材 / 店铺',
                         items: [
-                            '设置里导入 ZIP 可选「覆盖」或「增加」',
-                            '增加模式：已有记录跳过；素材按同 id 或「同店+同名」判断'
+                            '店铺可绑大小标签；点店铺/标签名可筛素材并看数量',
+                            '同店导入：连续新建、可锁分类、Ctrl+S',
+                            '图片 JPG/PNG，可放大缩放拖动；素材可一键复制（含图）'
                         ]
                     },
                     {
-                        heading: '其它体验',
+                        heading: '账单',
                         items: [
-                            '素材支持一键「复制」（含图片）',
-                            '按店/标签筛选时空状态提示更清楚'
+                            '按起始～结束汇总总收入/支出/净利；带小数不再算错或显示成一串 0'
+                        ]
+                    },
+                    {
+                        heading: '设置',
+                        items: [
+                            '可切换莫兰迪主题色',
+                            '导入 ZIP 可选覆盖或增加',
+                            '更新公告按日期折叠，同日合并为一条'
                         ]
                     }
                 ]
@@ -13071,10 +14715,16 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
                         if (!str.includes(search)) return false;
                     }
                     if (statusFilter === 'soldout') {
-                        if (!item.enableInventory || (item.quantity || 0) > 0) return false;
+                        if (item.wenyou) {
+                            const ws = calcWenyouStock(item);
+                            if (!ws.enableInventory || !ws.soldOut) return false;
+                        } else if (!item.enableInventory || (item.quantity || 0) > 0) return false;
                     }
                     if (statusFilter === 'instock') {
-                        if (!item.enableInventory || (item.quantity || 0) <= 0) return false;
+                        if (item.wenyou) {
+                            const ws = calcWenyouStock(item);
+                            if (!ws.enableInventory || ws.soldOut) return false;
+                        } else if (!item.enableInventory || (item.quantity || 0) <= 0) return false;
                     }
                     return true;
                 });
@@ -13524,6 +15174,51 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
             switchScheduleView('horizontal');
             onElem('scheduleViewHorizontal', 'click', () => switchScheduleView('horizontal'));
             onElem('scheduleViewVertical', 'click', () => switchScheduleView('vertical'));
+            onElem('orderWorkbenchBtn', 'click', (e) => {
+                e.stopPropagation();
+                const menu = document.getElementById('orderWorkbenchMenu');
+                const btn = document.getElementById('orderWorkbenchBtn');
+                if (!menu) return;
+                const open = menu.classList.toggle('hidden') === false;
+                btn?.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            onElem('scheduleViewLobby', 'click', () => switchScheduleView('lobby'));
+            onElem('scheduleViewKitchen', 'click', () => switchScheduleView('kitchen'));
+            document.addEventListener('click', (e) => {
+                const wrap = document.getElementById('orderWorkbenchWrap');
+                if (wrap && !wrap.contains(e.target)) {
+                    document.getElementById('orderWorkbenchMenu')?.classList.add('hidden');
+                    document.getElementById('orderWorkbenchBtn')?.setAttribute('aria-expanded', 'false');
+                }
+            });
+            onElem('startOrderBatchModeBtn', 'click', startOrderBatchMode);
+            onElem('exitOrderBatchModeBtn', 'click', exitOrderBatchMode);
+            onElem('openPickupSlipFromDetailBtn', 'click', () => {
+                const s = window._currentDetailSchedule;
+                if (s) showPickupSlip(s);
+            });
+            onElem('toggleDepositPaidBtn', 'click', () => {
+                const s = window._currentDetailSchedule;
+                if (s) toggleSchedulePayFlag(s.id, 'depositPaid');
+            });
+            onElem('toggleFinalPaidBtn', 'click', () => {
+                const s = window._currentDetailSchedule;
+                if (s) toggleSchedulePayFlag(s.id, 'finalPaid');
+            });
+            onElem('closePickupSlipBtn', 'click', closePickupSlipModal);
+            onElem('closePickupSlipBtn2', 'click', closePickupSlipModal);
+            onElem('exportPickupSlipBtn', 'click', exportPickupSlipImage);
+            document.getElementById('pickupSlipModal')?.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'pickupSlipModal') closePickupSlipModal();
+            });
+            document.querySelectorAll('input[name="projectTemplateKind"]').forEach(r => {
+                r.addEventListener('change', () => setProjectTemplateKindUI(r.value));
+            });
+            onElem('addComboLineBtn', 'click', () => {
+                const cur = collectComboLinesFromEditor();
+                cur.push({ name: '', price: '', qty: 1 });
+                renderComboLinesEditor(cur);
+            });
             onElem('batchCompleteSchedulesBtn', 'click', batchCompleteSchedules);
 
             const shopInputElem = document.getElementById('shopInput'),
@@ -13654,9 +15349,11 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
             onElem('addScheduleItemBtn', 'click', () => addScheduleItemRowWithSearch());
             document.querySelectorAll('.order-filter-btn').forEach(btn => btn.addEventListener('click', () => {
                 currentOrderFilter = btn.dataset.filterOrder;
-                document.querySelectorAll('.order-filter-btn').forEach(b => b.classList.remove(
-                    'bg-indigo-100', 'text-indigo-700'));
-                btn.classList.add('bg-indigo-100', 'text-indigo-700');
+                document.querySelectorAll('.order-filter-btn').forEach(b => {
+                    b.classList.remove('is-active', 'bg-indigo-100', 'text-indigo-700');
+                });
+                btn.classList.add('is-active', 'bg-indigo-100', 'text-indigo-700');
+                currentSchedulePage = 1;
                 clearScheduleSelection();
                 renderScheduleList();
             }));
@@ -13668,6 +15365,43 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
             onElem('addSellTypeBtn', 'click', () => openSellTypeModal(null));
             onElem('saveSellTypeBtn', 'click', saveSellType);
             onElem('closeSellTypeModal', 'click', closeSellTypeModal);
+            onElem('toggleWenyouModeBtn', 'click', toggleSellWenyouMode);
+            onElem('wenyouKindSelect', 'change', () => { syncWenyouKindFields(); updateWenyouCarAmountDisplay(); });
+            onElem('wenyouQuota', 'input', () => updateWenyouCarAmountDisplay());
+            onElem('wenyouRemain', 'input', () => updateWenyouCarAmountDisplay());
+            onElem('sellTypePrice', 'input', () => updateWenyouCarAmountDisplay());
+            onElem('openWenyouAuthModalBtn', 'click', () => openWenyouAuthModal({ mode: 'draft' }));
+            onElem('closeWenyouAuthModalBtn', 'click', closeWenyouAuthModal);
+            onElem('closeWenyouAuthModalBtn2', 'click', closeWenyouAuthModal);
+            document.getElementById('wenyouAuthModal')?.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'wenyouAuthModal') closeWenyouAuthModal();
+            });
+            onElem('wenyouAuthSearch', 'input', () => renderWenyouAuthEditor());
+            onElem('wenyouAuthAddBtn', 'click', () => {
+                addWenyouAuthRow();
+                const modal = document.getElementById('wenyouAuthModal');
+                if (modal && modal.classList.contains('hidden')) openWenyouAuthModal({ mode: 'draft' });
+            });
+            onElem('closeWenyouSponsorInfoBtn', 'click', closeWenyouSponsorInfo);
+            document.getElementById('wenyouSponsorInfoModal')?.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'wenyouSponsorInfoModal') closeWenyouSponsorInfo();
+            });
+            document.getElementById('wenyouAuthList')?.addEventListener('paste', (e) => {
+                if (wenyouAuthModalCtx.mode === 'view') return;
+                const clip = e.clipboardData?.getData('text');
+                if (!clip || (!clip.includes('\n') && !clip.includes('\t'))) return;
+                e.preventDefault();
+                pasteWenyouAuthRows(clip);
+            });
+            window.openWenyouAuthModal = openWenyouAuthModal;
+            window.openWenyouSponsorInfo = openWenyouSponsorInfo;
+            onElem('closeWenyouTransferBtn', 'click', closeWenyouTransferModal);
+            onElem('confirmWenyouTransferBtn', 'click', confirmWenyouTransfer);
+            document.getElementById('wenyouTransferModal')?.addEventListener('click', (e) => {
+                if (e.target && e.target.id === 'wenyouTransferModal') closeWenyouTransferModal();
+            });
+            updateWenyouModeButton();
+            if (sellWenyouMode) ensureWenyouAutoTags();
             onElem('sellTypeSearch', 'input', () => renderSellTypes());
             onElem('sellTypeFilterStatus', 'change', () => {
                 currentSellTypePage = 1;
@@ -13775,12 +15509,16 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
                     closeImageLightbox();
                     return;
                 }
-                // 同店导入：Ctrl/Cmd + S 保存并继续
+                // 同店导入 / 连续开单：Ctrl/Cmd + S 保存并继续
                 if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S')) {
-                    const modal = document.getElementById('materialModal');
-                    if (sameShopMode && modal && !modal.classList.contains('hidden') && !editingMaterialId) {
+                    const materialModal = document.getElementById('materialModal');
+                    const scheduleModal = document.getElementById('scheduleModal');
+                    if (sameShopMode && materialModal && !materialModal.classList.contains('hidden') && !editingMaterialId) {
                         e.preventDefault();
                         saveMaterial();
+                    } else if (orderBatchMode && scheduleModal && !scheduleModal.classList.contains('hidden')) {
+                        e.preventDefault();
+                        saveSchedule();
                     }
                 }
             });
@@ -14180,19 +15918,31 @@ body{margin:0;padding:16px;background:#eee;display:flex;justify-content:center}
             setLayout('list');
 
             // ===== 切换订单视图（横向卡片/纵向卡片） =====
+            function syncOrderListChromeVisibility() {
+                const hide = currentScheduleView === 'lobby' || currentScheduleView === 'kitchen';
+                document.getElementById('orderFilterRow')?.classList.toggle('hidden', hide);
+                document.getElementById('orderSearchRow')?.classList.toggle('hidden', hide);
+            }
+
             function switchScheduleView(view) {
                 currentScheduleView = view;
-                const hBtn = document.getElementById('scheduleViewHorizontal');
-                const vBtn = document.getElementById('scheduleViewVertical');
-                const baseClass = 'layout-switch-btn text-sm px-3 py-1 rounded-full shadow-sm transition-colors';
-
-                if (view === 'horizontal') {
-                    hBtn.className = baseClass + ' bg-gray-700 text-white';
-                    vBtn.className = baseClass + ' bg-gray-200 text-gray-600 hover:bg-gray-300';
-                } else {
-                    hBtn.className = baseClass + ' bg-gray-200 text-gray-600 hover:bg-gray-300';
-                    vBtn.className = baseClass + ' bg-gray-700 text-white';
+                document.getElementById('scheduleViewHorizontal')?.classList.toggle('is-active', view === 'horizontal');
+                document.getElementById('scheduleViewVertical')?.classList.toggle('is-active', view === 'vertical');
+                const isWb = view === 'lobby' || view === 'kitchen';
+                document.getElementById('orderWorkbenchBtn')?.classList.toggle('is-active', isWb);
+                const label = document.getElementById('orderWorkbenchBtnLabel');
+                if (label) {
+                    label.textContent = view === 'lobby' ? '大厅' : (view === 'kitchen' ? '出餐' : '工作台');
                 }
+                document.getElementById('orderWorkbenchBtn')?.setAttribute('aria-expanded', 'false');
+                document.querySelectorAll('.order-workbench-item').forEach(btn => {
+                    const on = (btn.id === 'scheduleViewLobby' && view === 'lobby') ||
+                        (btn.id === 'scheduleViewKitchen' && view === 'kitchen');
+                    btn.classList.toggle('bg-gray-100', on);
+                    btn.classList.toggle('font-medium', on);
+                });
+                document.getElementById('orderWorkbenchMenu')?.classList.add('hidden');
+                syncOrderListChromeVisibility();
                 renderScheduleList();
             }
         });
